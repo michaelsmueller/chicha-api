@@ -28,31 +28,32 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 
 ### User endpoints
 
-| Method  | Path                  | Description       | Body                               |
-| :----:  | ----------------      | ----------------  | ------------------------------     |
-|  POST   | `/users/register`     | create user       | `{ username, hashed_password, image, description, url }` |
-|  GET    | `/users/:id`          | read user         |                                    |
-|  PUT    | `/users/:id`          | update user       | `{ username, hashed_password, image, description, url }` |
-|  DELETE | `/users/:id`          | delete user       |                                    |
-|  GET    | `/users/heavyweights` | read heavyweights |                                    |
-|  GET    | `/users/:id/vouchers` | read vouchers     |                                    |
+| Method  | Path                  | Description            | Body                               |
+| :----:  | ----------------      | ----------------       | ------------------------------     |
+|  POST   | `/users/`             | create user            | `{ username, hashed_password, image, description, url }` |
+|  GET    | `/users/:id`          | read user              |                                    |
+|  PUT    | `/users/:id`          | update user            | `{ username, hashed_password, image, description, url }` |
+|  DELETE | `/users/:id`          | delete user            |                                    |
+|  GET    | `/users/heavyweights` | read heavyweights      |                                    |
+|  GET    | `/users/:id/vouchers` | read vouchers          |                                    |
 
 ### Event endpoints
     
-| Method  | Path                  | Description       | Body                               |
-| :----:  | ----------------      | ----------------  | ------------------------------     |
-|  GET    | `/events`             | list of events    |                                    |
-|  POST   | `/events`             | create event      | `{ facebook_id, name, cover, description, start_time, end_time, place }` |
-|  GET    | `/events/:id`         | read event        |                                    |
-|  PUT    | `/events/:id`         | update event      | `{ facebook_id, name, cover, description, start_time, end_time, place }` |
-|  DELETE | `/events/:id`         | delete event      |                                    |
+| Method  | Path                  | Description            | Body                               |
+| :----:  | ----------------      | ----------------       | ------------------------------     |
+|  GET    | `/events`             | list of events         |                                    |
+|  POST   | `/events`             | create event           | `{ facebook_id, name, cover, description, start_time, end_time, place }` |
+|  GET    | `/events/:id`         | read event             |                                    |
+|  PUT    | `/events/:id`         | update event           | `{ facebook_id, name, cover, description, start_time, end_time, place }` |
+|  PATCH  | `/events/:id/vote`    | upvote /downvote event | `{ vote }`                         |
+|  DELETE | `/events/:id`         | delete event           |                                    |
     
 ### Offers endpoints
 
-| Method  | Path                  | Description       | Body                               |
-| :----:  | ----------------      | ----------------  | ------------------------------     |
-|  GET    | `/offers`             | list of offers    |                                    |
-|  GET    | `/offers/:id`         | read offer        |                                    |
+| Method  | Path                  | Description            | Body                               |
+| :----:  | ----------------      | ----------------       | ------------------------------     |
+|  GET    | `/offers`             | list of offers         |                                    |
+|  GET    | `/offers/:id`         | read offer             |                                    |
 
 ## Models
 
@@ -66,6 +67,7 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 	description: String,
 	url: String,
 	points: Number,
+	balance: Number,
 	vouchers: [ ObjectId<Offer> ]
 }
 ```

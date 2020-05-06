@@ -1,90 +1,109 @@
-# Project Name
+# Chicha API
 
 ## Instructions how to start
 
-create `.env` file like the example `.env.sample`
+Create `.env` file like the example `.env.sample`.
 
-start with `npm run start-dev`
+Start with `npm start-dev`.
 
-**http://localhost:5000**
+go to **http://localhost:5000** (or whatever port you've configured in `.env`)
 
 ## Description
 
-Describe your project in one/two lines.
+Find, share and upvote your favorite things to do in Barcelona.
 
 ## Motivation
 
-Just a litle API for educational purposes.
+Crowdsource the best local events from knowledgable locals motivated to share and also get rewards from local businesses.
 
-## User Stories
+## Routes
 
-**404** - As a user I want to see a nice 404 page when I go to a page that doesn’t exist so that I know it was my fault
+### Auth endpoints
 
-**500** - As a user I want to see a nice error page when the super team screws it up so that I know that is not my fault
+| Method  | Path                  | Description       | Body                               |
+| :----:  | ----------------      | ----------------  | ------------------------------     |
+|  GET    | `/whoami`             | who am I          |                                    |
+|  POST   | `/signin`             | sign in user      | `{ username, hashed_password }`    |
+|  GET    | `/logout`             | logout session    |                                    |
 
-**Homepage** - As a user I want to be able to access the homepage so that I see what the app is about and login and signup
+### User endpoints
 
-**Sign up** - As a user I want to sign up on the webpage so that I can see all the events that I could attend
+| Method  | Path                  | Description       | Body                               |
+| :----:  | ----------------      | ----------------  | ------------------------------     |
+|  POST   | `/users/register`     | create user       | `{ username, hashed_password, image, description, url }` |
+|  GET    | `/users/:id`          | read user         |                                    |
+|  PUT    | `/users/:id`          | update user       | `{ username, hashed_password, image, description, url }` |
+|  DELETE | `/users/:id`          | delete user       |                                    |
+|  GET    | `/users/heavyweights` | read heavyweights |                                    |
+|  GET    | `/users/:id/vouchers` | read vouchers     |                                    |
 
-**Login** - As a user I want to be able to log in on the webpage so that I can get back to my account
+### Event endpoints
+    
+| Method  | Path                  | Description       | Body                               |
+| :----:  | ----------------      | ----------------  | ------------------------------     |
+|  GET    | `/events`             | list of events    |                                    |
+|  POST   | `/events`             | create event      | `{ facebook_id, name, cover, description, start_time, end_time, place }` |
+|  GET    | `/events/:id`         | read event        |                                    |
+|  PUT    | `/events/:id`         | update event      | `{ facebook_id, name, cover, description, start_time, end_time, place }` |
+|  DELETE | `/events/:id`         | delete event      |                                    |
+    
+### Offers endpoints
 
-**Logout** - As a user I want to be able to log out from the webpage so that I can make sure no one will access my account
-
-**Events list** - As a user I want to see all the events available so that I can choose which ones I want to attend
-
-**Events create** - As a user I want to create an event so that I can invite others to attend
-
-**Events detail** - As a user I want to see the event details and attendee list of one event so that I can decide if I want to attend
-
-**Attend event** - As a user I want to be able to attend to event so that the organizers can count me in
-
-## Backlog
-
-List of other features outside of the MVPs scope
-
-User profile: - see my profile - upload my profile picture - see other users profile - list of events created by the user - list events the user is attending
-
-Geo Location: - add geolocation to events when creating - show event in a map in event detail page - show all events in a map in the event list page
-
-Homepage: - …
-
-## ROUTES:
-
-### Endpoints
-
-| Method | Path         | description     | Body |
-| :----: | ------------ | --------------- | ---- |
-|  GET   | `/protected` | protected route |      |
-
-### Auth
-
-| Method | Path      | description    | Body                     |
-| :----: | --------- | -------------- | ------------------------ |
-|  GET   | `/whoami` | who am i       |                          |
-|  POST  | `/signup` | signup a user  | `{ username, password }` |
-|  POST  | `/login`  | login a user   | `{ username, password }` |
-|  GET   | `/logout` | logout session |                          |
+| Method  | Path                  | Description       | Body                               |
+| :----:  | ----------------      | ----------------  | ------------------------------     |
+|  GET    | `/offers`             | list of offers    |                                    |
+|  GET    | `/offers/:id`         | read offer        |                                    |
 
 ## Models
 
-User model
+### User model
 
 ```javascript
 {
-	username: String;
-	password: String;
+	username: String,
+	hashed_password: String,
+	image: String,
+	description: String,
+	url: String,
+	points: Number,
+	vouchers: [ ObjectId<Offer> ]
 }
 ```
 
-Event model
+### Event model
 
 ```javascript
 {
-	owner: ObjectId<User>
-	name: String
-	description: String
-	date: Date
-	location: String
+	owner: ObjectId<User>,
+	facebook_id: String,
+	name: String,
+	cover: String,
+	description: String,
+	start_time: Date,
+	end_time: Date,
+	place: {
+		facebook_id: String,
+		name: String,
+		location: {
+			city: String,
+			country: String,
+			latitude: Number,
+			longitude: Number,
+		}
+	},
+	upvotes: Number,
+	downvotes: Number,
+}
+```
+
+### Offer model
+
+```javascript
+{
+	merchant: String,
+	image: String,
+	description: String,
+	cost: Number,
 }
 ```
 
@@ -92,16 +111,11 @@ Event model
 
 ### Trello
 
-Link to Trello
+[Trello board](https://trello.com/b/O8DhDgcu/chicha)
 
 ### Git
 
-The url to your repository and to your deployed project
+[GitHub repository - API](https://github.com/michaelsmueller/chicha-api)
 
-[Repository Link](http://github.com/)
+[GitHub repository - frontend](https://github.com/michaelsmueller/chicha)
 
-[Deploy Link](http://heroku.com/)
-
-### Slides
-
-[Slides Link](http://slides.com/)

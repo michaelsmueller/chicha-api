@@ -10,6 +10,7 @@ const bcryptSalt = 10;
 const router = express.Router();
 
 router.get('/whoami', (req, res, next) => {
+	console.log('req.session', req.session);
 	if (req.session.currentUser) {
 		res.status(200).json(req.session.currentUser);
 	} else {
@@ -17,26 +18,7 @@ router.get('/whoami', (req, res, next) => {
 	}
 });
 
-router.post('/signup', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
-	const { username, password } = res.locals.auth;
-	try {
-		const user = await User.findOne({ username });
-		if (user) {
-			return res.status(422).json({ code: 'username-not-unique' });
-		}
-
-		const salt = bcrypt.genSaltSync(bcryptSalt);
-		const hashedPassword = bcrypt.hashSync(password, salt);
-
-		const newUser = await User.create({ username, hashedPassword });
-		req.session.currentUser = newUser;
-		return res.json(newUser);
-	} catch (error) {
-		next(error);
-	}
-});
-
-router.post('/login', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
+router.post('/signin', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
 	const { username, password } = res.locals.auth;
 	try {
 		const user = await User.findOne({ username });
@@ -54,7 +36,7 @@ router.post('/login', checkUsernameAndPasswordNotEmpty, async (req, res, next) =
 });
 
 router.get('/logout', (req, res, next) => {
-	req.session.destroy(err => {
+	req.session.destroy((err) => {
 		if (err) {
 			next(err);
 		}

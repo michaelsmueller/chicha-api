@@ -25,6 +25,7 @@ mongoose
 	});
 
 const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
 const demoRouter = require('./routes/demo');
 
 const app = express();
@@ -57,6 +58,7 @@ app.use(
 );
 
 app.use('/', authRouter);
+app.use('/users', userRouter);
 app.use('/protected', demoRouter);
 
 // catch 404 and forward to error handler

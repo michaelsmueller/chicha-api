@@ -107,7 +107,7 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 	merchant: String,
 	image: String,
 	description: String,
-	cost: Number,
+	point_cost: Number,
 }
 ```
 

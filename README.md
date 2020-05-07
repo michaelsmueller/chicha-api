@@ -62,7 +62,7 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 ```javascript
 {
 	username: String,
-	password: String,
+	hashed_password: String,
 	image: String,
 	description: String,
 	url: String,
@@ -76,7 +76,7 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 
 ```javascript
 {
-	owner: ObjectId<User>,
+	creator: ObjectId<User>,
 	facebook_id: String,
 	name: String,
 	cover: String,

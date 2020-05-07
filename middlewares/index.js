@@ -1,4 +1,5 @@
 const checkIfLoggedIn = (req, res, next) => {
+	console.log('checkIfLoggedIn req.session', req.session);
 	if (req.session.currentUser) {
 		next();
 	} else {

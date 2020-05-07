@@ -20,12 +20,14 @@ router.get('/whoami', (req, res, next) => {
 
 router.post('/signin', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
 	const { username, password } = res.locals.auth;
+	console.log(`signin username ${username} password ${password}`);
 	try {
 		const user = await User.findOne({ username });
+		console.log('user is', user);
 		if (!user) {
 			return res.status(404).json({ code: 'not-found' });
 		}
-		if (bcrypt.compareSync(password, user.hashedPassword)) {
+		if (bcrypt.compareSync(password, user.hashed_password)) {
 			req.session.currentUser = user;
 			return res.json(user);
 		}

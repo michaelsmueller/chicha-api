@@ -23,16 +23,16 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 | Method  | Path                  | Description       | Body                               |
 | :----:  | ----------------      | ----------------  | ------------------------------     |
 |  GET    | `/whoami`             | who am I          |                                    |
-|  POST   | `/signin`             | sign in user      | `{ username, hashed_password }`    |
+|  POST   | `/signin`             | sign in user      | `{ username, password }`    |
 |  GET    | `/logout`             | logout session    |                                    |
 
 ### User endpoints
 
 | Method  | Path                  | Description            | Body                               |
 | :----:  | ----------------      | ----------------       | ------------------------------     |
-|  POST   | `/users/`             | create user            | `{ username, hashed_password, image, description, url }` |
+|  POST   | `/users/`             | create user            | `{ username, password, image, description, url }` |
 |  GET    | `/users/:id`          | read user              |                                    |
-|  PUT    | `/users/:id`          | update user            | `{ username, hashed_password, image, description, url }` |
+|  PUT    | `/users/:id`          | update user            | `{ username, password, image, description, url }` |
 |  DELETE | `/users/:id`          | delete user            |                                    |
 |  GET    | `/users/heavyweights` | read heavyweights      |                                    |
 |  GET    | `/users/:id/vouchers` | read vouchers          |                                    |
@@ -62,7 +62,7 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 ```javascript
 {
 	username: String,
-	hashed_password: String,
+	password: String,
 	image: String,
 	description: String,
 	url: String,
@@ -91,6 +91,8 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 			country: String,
 			latitude: Number,
 			longitude: Number,
+			street: String,
+			zip: String,
 		}
 	},
 	upvotes: Number,

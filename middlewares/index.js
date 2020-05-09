@@ -1,5 +1,4 @@
 const checkIfLoggedIn = (req, res, next) => {
-	console.log('checkIfLoggedIn req.session', req.session);
 	if (req.session.currentUser) {
 		next();
 	} else {
@@ -9,8 +8,6 @@ const checkIfLoggedIn = (req, res, next) => {
 
 const checkUsernameAndPasswordNotEmpty = (req, res, next) => {
 	const { username, password } = req.body;
-	console.log('checkUsernameAndPasswordNotEmpty');
-	
 	if (username !== '' && password !== '') {
 		res.locals.auth = req.body;
 		next();

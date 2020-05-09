@@ -10,13 +10,12 @@ const bcryptSalt = 10;
 const router = express.Router();
 
 router.post('/', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
-	console.log('post to user');
 	const { username, password } = res.locals.auth;
 	console.log(`username ${username} password ${password}`);
 	try {
 		const user = await User.findOne({ username });
 		if (user) {
-			return res.status(422).json({ code: 'username-not-unique' });
+			return res.status(409).json({ code: 'username-not-unique' });
 		}
 
 		const salt = bcrypt.genSaltSync(bcryptSalt);

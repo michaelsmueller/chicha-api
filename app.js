@@ -9,24 +9,24 @@ const cors = require('cors');
 
 require('dotenv').config();
 
-const dbPath = process.env.MONGODB_URI;
+const DB_PATH = process.env.MONGODB_URI;
 
 mongoose
-	.connect(dbPath, {
+	.connect(DB_PATH, {
 		useCreateIndex: true,
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 	})
 	.then(() => {
-		console.log(`conected to ${dbPath}`);
+		console.log(`conected to ${DB_PATH}`);
 	})
 	.catch(error => {
 		console.error('Error connecting to mongo', error);
 	});
 
 const authRouter = require('./routes/auth');
-const userRouter = require('./routes/user');
-const demoRouter = require('./routes/demo');
+const userRouter = require('./routes/users');
+const eventRouter = require('./routes/events');
 
 const app = express();
 
@@ -59,7 +59,7 @@ app.use(
 
 app.use('/', authRouter);
 app.use('/users', userRouter);
-app.use('/protected', demoRouter);
+app.use('/events', eventRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

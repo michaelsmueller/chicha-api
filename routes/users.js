@@ -23,7 +23,7 @@ router.post('/', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
 
 		const newUser = await User.create({ username, hashed_password });
 		req.session.currentUser = newUser;
-		return res.json(newUser);
+		return res.status(201).json(newUser);
 	} catch (error) {
 		next(error);
 	}

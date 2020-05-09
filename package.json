@@ -6,7 +6,13 @@
 		"start": "node ./bin/www",
 		"start-dev": "nodemon --inspect ./bin/www"
 	},
+	"nodemonConfig": {
+		"ignore": [
+			"*.json"
+		]
+	},
 	"dependencies": {
+		"axios": "^0.19.2",
 		"bcrypt": "^4.0.1",
 		"connect-mongo": "^3.2.0",
 		"cookie-parser": "~1.4.4",
@@ -15,8 +21,10 @@
 		"dotenv": "^8.2.0",
 		"express": "~4.16.1",
 		"express-session": "^1.17.0",
+		"fs": "0.0.1-security",
 		"mongoose": "^5.9.2",
-		"morgan": "~1.9.1"
+		"morgan": "~1.9.1",
+		"puppeteer": "^3.0.4"
 	},
 	"devDependencies": {
 		"eslint": "^6.8.0",

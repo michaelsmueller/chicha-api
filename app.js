@@ -21,7 +21,7 @@ mongoose
 		console.log(`conected to ${dbPath}`);
 	})
 	.catch(error => {
-		console.error(error);
+		console.error('Error connecting to mongo', error);
 	});
 
 const authRouter = require('./routes/auth');

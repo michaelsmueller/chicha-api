@@ -61,54 +61,58 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 
 ```javascript
 {
-	username: String,
-	hashed_password: String,
-	image: String,
-	description: String,
-	url: String,
-	points: Number,
-	balance: Number,
-	vouchers: [ ObjectId<Offer> ]
-}
+	username: { type: String, required: true, unique: true, trim: true },
+	hashed_password: { type: String, required: true },
+	image: { type: String },
+	description: { type: String },
+	url: { type: String },
+	points: { type: Number },
+	balance: { type: Number },
+	vouchers: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ]
+},
 ```
 
 ### Event model
 
 ```javascript
 {
-	creator: ObjectId<User>,
-	facebook_id: String,
-	name: String,
-	cover: String,
-	description: String,
-	start_time: Date,
-	end_time: Date,
-	place: {
-		facebook_id: String,
-		name: String,
-		location: {
-			city: String,
-			country: String,
-			latitude: Number,
-			longitude: Number,
-			street: String,
-			zip: String,
-		}
+	creator: { type: Schema.Types.ObjectId, ref: 'User' },
+	upvotes: { type: Number },
+	downvotes: { type: Number },
+	data: {
+		id: { type: String },
+		name: { type: String, required: true },
+		cover: {
+			source: { type: String }
+		},
+		attending_count: { type: Number },
+		interested_count: { type: Number },
+		description: { type: String },
+		start_time: { type: Date },
+		end_time: { type: Date},
+		place: {
+			name: { type: String },
+			location: {
+				street: { type: String },
+				city: { type: String },
+				country: { type: String },
+				latitude: { type: Number },
+				longitude: { type: Number },
+			},
+		},
 	},
-	upvotes: Number,
-	downvotes: Number,
-}
+},
 ```
 
 ### Offer model
 
 ```javascript
 {
-	merchant: String,
-	image: String,
-	description: String,
-	point_cost: Number,
-}
+	merchant: { type: String },
+	image: { type: String },
+	description: { type: String },
+	point_cost: { type: Number },
+},
 ```
 
 ## Links

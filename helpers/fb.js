@@ -39,7 +39,7 @@ const getEventId = (url) => {
 const likeEvent = async (url) => {
   const eventId = getEventId(url);
   const mobileUrl = `https://m.facebook.com/events/${eventId}`;
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
   if (Object.keys(cookies).length) await page.setCookie(...cookies);
   else await loginToFacebook();

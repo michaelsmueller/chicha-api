@@ -11,7 +11,6 @@ const router = express.Router();
 
 router.post('/', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
 	const { username, password } = res.locals.auth;
-	console.log(`username ${username} password ${password}`);
 	try {
 		const user = await User.findOne({ username });
 		if (user) {

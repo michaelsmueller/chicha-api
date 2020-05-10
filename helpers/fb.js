@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const { FB_USERNAME, FB_PASSWORD, FB_TOKEN } = process.env;
 
-const getAndReturnEvent = async (url) => {
+const getEventData = async (url) => {
 	try {
 		const { data } = await getEvent(url);
 		return data;
@@ -24,7 +24,8 @@ const getAndReturnEvent = async (url) => {
 
 const getEvent = (url) => {
   const eventId = getEventId(url);
-  const requestUrl = `https://graph.facebook.com/${eventId}?access_token=${FB_TOKEN}`;
+  const FIELDS = [ 'name', 'cover', 'attending_count', 'interested_count', 'description', 'start_time', 'end_time', 'place' ];
+  const requestUrl = `https://graph.facebook.com/${eventId}?fields=${FIELDS}&access_token=${FB_TOKEN}`;
   return axios.get(requestUrl);
 };
 
@@ -68,5 +69,6 @@ const writeCookies = async (page) => {
 }
 
 module.exports = {
-  getAndReturnEvent,
+  getEventData,
+  getEventId,
 };

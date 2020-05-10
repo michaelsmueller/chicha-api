@@ -44,7 +44,7 @@ const likeEvent = async (url) => {
   if (Object.keys(cookies).length) await page.setCookie(...cookies);
   else await loginToFacebook();
   await goToEventAndClickInterested(mobileUrl, page);
-  await page.waitFor(1000);
+  await page.waitFor(10000);
   browser.close();
 };
 
@@ -59,7 +59,7 @@ const loginToFacebook = async () => {
   await page.type('#email', FB_USERNAME, { delay: 1 });
   await page.type('#pass', FB_PASSWORD, { delay: 1 });
   await page.click('#loginbutton');
-  await page.waitFor(2000);
+  await page.waitFor(5000);
   await writeCookies(page);
 }
 

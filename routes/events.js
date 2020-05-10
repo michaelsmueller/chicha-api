@@ -5,6 +5,25 @@ const Event = require('../models/Event');
 
 const router = express.Router();
 
+router.get('/', async (req, res, next) => {
+	try {
+		const events = await Event.find();
+		return res.json({ code: 'events-read', events });
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.get('/:id', async (req, res, next) => {
+	const { id } = req.params;
+	try {
+		const event = await Event.findById(id);
+		return res.json({ code: 'event-read', event });
+	} catch (error) {
+		next(error);
+	}
+});
+
 router.post('/', checkURLNotEmpty, async (req, res, next) => {
 	const { currentUser  } = req.session;
 	const { url } = res.locals.event;

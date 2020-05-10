@@ -117,6 +117,10 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 
 ## Links
 
+### Deployment
+
+[Heroku](https://chicha-api.herokuapp.com)
+
 ### Trello
 
 [Trello board](https://trello.com/b/O8DhDgcu/chicha)

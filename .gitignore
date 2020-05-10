@@ -62,3 +62,6 @@ typings/
 
 # mac files
 .DS_Store
+
+# my Facebook cookies, get your own
+cookies.json

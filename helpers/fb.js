@@ -7,32 +7,25 @@ require('dotenv').config();
 
 const { FB_USERNAME, FB_PASSWORD, FB_TOKEN } = process.env;
 
-const likeEvent = async (url) => {
+const getAndReturnEvent = async (url) => {
+	try {
+		const { data } = await getEvent(url);
+		return data;
+	} catch (error) {
+		try {
+			await likeEvent(url);
+			const { data } = await getEvent(url);
+			return data;
+		} catch (error) {
+			return error;
+		}
+	}
+}
+
+const getEvent = (url) => {
   const eventId = getEventId(url);
-  const mobileURL = `https://m.facebook.com/events/${eventId}`;
-  console.log('likeEvent passed url', url);
-  console.log('event id', eventId);
-  console.log('mobile event URL', mobileURL);
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-  
-  if (Object.keys(cookies).length) {
-    await page.setCookie(...cookies);
-  } else {
-    await page.goto('https://www.facebook.com/login/', { waitUntil: 'networkidle0' });
-    await page.type('#email', FB_USERNAME, { delay: 1 });
-    await page.type('#pass', FB_PASSWORD, { delay: 1 });
-    await page.click('#loginbutton');
-    await page.waitFor(2000); // 1500 is too fast
-    const currentCookies = await page.cookies();
-    console.log('currentCookies', currentCookies);
-    fs.writeFileSync('./cookies.json', JSON.stringify(currentCookies));
-  }
-  await page.goto(mobileURL, { waitUntil: 'networkidle2' });
-  const links = await page.$x("//a[contains(., 'Interested')]");
-  await links[0].click();
-  await page.waitFor(1000);
-  return 'success';
+  const requestUrl = `https://graph.facebook.com/${eventId}?access_token=${FB_TOKEN}`;
+  return axios.get(requestUrl);
 };
 
 const getEventId = (url) => {
@@ -42,14 +35,38 @@ const getEventId = (url) => {
   return array[array.length - 1];
 }
 
-const getEvent = (url) => {
+const likeEvent = async (url) => {
   const eventId = getEventId(url);
-  const requestURL = `https://graph.facebook.com/${eventId}?access_token=${FB_TOKEN}`;
-  console.log('requesting URL', requestURL);
-  return axios.get(requestURL);
+  const mobileUrl = `https://m.facebook.com/events/${eventId}`;
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  if (Object.keys(cookies).length) await page.setCookie(...cookies);
+  else await loginToFacebook();
+  await goToEventAndClickInterested(mobileUrl, page);
+  await page.waitFor(1000);
+  browser.close();
 };
 
+const goToEventAndClickInterested = async (mobileUrl, page) => {
+  await page.goto(mobileUrl, { waitUntil: 'networkidle2' });
+  const links = await page.$x("//a[contains(., 'Interested')]");
+  await links[0].click();
+};
+
+const loginToFacebook = async () => {
+  await page.goto('https://www.facebook.com/login/', { waitUntil: 'networkidle0' });
+  await page.type('#email', FB_USERNAME, { delay: 1 });
+  await page.type('#pass', FB_PASSWORD, { delay: 1 });
+  await page.click('#loginbutton');
+  await page.waitFor(2000);
+  await writeCookies(page);
+}
+
+const writeCookies = async (page) => {
+  const currentCookies = await page.cookies();
+  fs.writeFileSync('./cookies.json', JSON.stringify(currentCookies));
+}
+
 module.exports = {
-  likeEvent,
-  getEvent,
+  getAndReturnEvent,
 };

@@ -47,6 +47,8 @@ const likeEvent = async (url) => {
   const args = [
     '--no-sandbox',
     '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--single-process',
   ];
 
   const options = {

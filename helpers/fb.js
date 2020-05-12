@@ -46,16 +46,11 @@ const likeEvent = async (url) => {
   const args = [
     '--no-sandbox',
     '--disable-setuid-sandbox',
-    '--disable-infobars',
-    '--window-position=0,0',
-    '--ignore-certifcate-errors',
-    '--ignore-certifcate-errors-spki-list',
   ];
 
   const options = {
     args,
     headless: false,
-    ignoreHTTPSErrors: true,
   };
 
   const browser = await puppeteer.launch(options);

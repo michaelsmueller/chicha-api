@@ -1,4 +1,7 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin());
+
 const fs = require('fs');
 const cookies = require('../cookies.json');
 const axios = require('axios');
@@ -40,8 +43,7 @@ const likeEvent = async (url) => {
   const eventId = getEventId(url);
   const mobileUrl = `https://m.facebook.com/events/${eventId}`;
   const browser = await puppeteer.launch({
-    headless: false,
-    args: ['--no-sandbox']
+    headless: true,
   });
   const page = await browser.newPage();
   if (Object.keys(cookies).length) await page.setCookie(...cookies);

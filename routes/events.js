@@ -48,4 +48,14 @@ router.post('/', checkURLNotEmpty, async (req, res, next) => {
 	}
 });
 
+router.delete('/:id', async (req, res, next) => {
+	const { id } = req.params;
+	try {
+		await Event.findByIdAndDelete(id);
+		return res.status(200).json({ code: 'event-deleted', id });
+	} catch (error) {
+		next(error);
+	}
+});
+
 module.exports = router;

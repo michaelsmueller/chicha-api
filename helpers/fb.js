@@ -1,4 +1,7 @@
 const puppeteer = require('puppeteer');
+// const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+// puppeteer.use(StealthPlugin());
+
 const fs = require('fs');
 const cookies = require('../cookies.json');
 const axios = require('axios');
@@ -37,15 +40,32 @@ const getEventId = (url) => {
 }
 
 const likeEvent = async (url) => {
+  console.log('likeEvent');
   const eventId = getEventId(url);
   const mobileUrl = `https://m.facebook.com/events/${eventId}`;
-  const browser = await puppeteer.launch({
-    headless: false,
-    args: ['--no-sandbox']
-  });
+
+  const args = [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--single-process',
+  ];
+
+  const options = {
+    args,
+    headless: true,
+  };
+
+  const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
-  if (Object.keys(cookies).length) await page.setCookie(...cookies);
-  else await loginToFacebook(page);
+
+  if (Object.keys(cookies).length) {
+    console.log('setting cookies', cookies);
+    await page.setCookie(...cookies);
+  } else {
+    await loginToFacebook(page);
+  }
+
   await goToEventAndClickInterested(mobileUrl, page);
   await page.waitFor(10000);
   browser.close();
@@ -58,11 +78,18 @@ const goToEventAndClickInterested = async (mobileUrl, page) => {
 };
 
 const loginToFacebook = async (page) => {
-  await page.goto('https://www.facebook.com/login/', { waitUntil: 'networkidle0' });
+  console.log('loginToFacebook');
+  try {
+    await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle0' });
+  } catch (error) {
+    console.log('error navigating to Facebook login');
+  }
+  await page.screenshot({path: 'prelogin.png'});
   await page.type('#email', FB_USERNAME, { delay: 1 });
   await page.type('#pass', FB_PASSWORD, { delay: 1 });
   await page.click('#loginbutton');
   await page.waitFor(5000);
+  await page.screenshot({path: 'postlogin.png'});
   await writeCookies(page);
 }
 

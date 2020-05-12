@@ -40,6 +40,7 @@ const getEventId = (url) => {
 }
 
 const likeEvent = async (url) => {
+  console.log('likeEvent');
   const eventId = getEventId(url);
   const mobileUrl = `https://m.facebook.com/events/${eventId}`;
 
@@ -53,10 +54,25 @@ const likeEvent = async (url) => {
     headless: false,
   };
 
-  const browser = await puppeteer.launch(options);
-  const page = await browser.newPage();
-  if (Object.keys(cookies).length) await page.setCookie(...cookies);
-  else await loginToFacebook(page);
+  try {
+    const browser = await puppeteer.launch(options);
+  } catch (error) {
+    console.log('error launching browser with options', options);
+  }
+
+  try {
+    const page = await browser.newPage();
+  } catch (error) {
+    console.log('error opening new page', options);
+  }
+
+  if (Object.keys(cookies).length) {
+    console.log('setting cookies', cookies);
+    await page.setCookie(...cookies);
+  } else {
+    await loginToFacebook(page);
+  }
+
   await goToEventAndClickInterested(mobileUrl, page);
   await page.waitFor(10000);
   browser.close();
@@ -69,7 +85,12 @@ const goToEventAndClickInterested = async (mobileUrl, page) => {
 };
 
 const loginToFacebook = async (page) => {
-  await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle0' });
+  console.log('loginToFacebook');
+  try {
+    await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle0' });
+  } catch (error) {
+    console.log('error navigating to Facebook login');
+  }
   await page.type('#email', FB_USERNAME, { delay: 1 });
   await page.type('#pass', FB_PASSWORD, { delay: 1 });
   await page.click('#loginbutton');

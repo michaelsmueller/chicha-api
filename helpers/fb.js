@@ -1,6 +1,6 @@
-const puppeteer = require('puppeteer-extra');
-const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-puppeteer.use(StealthPlugin());
+const puppeteer = require('puppeteer');
+// const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+// puppeteer.use(StealthPlugin());
 
 const fs = require('fs');
 const cookies = require('../cookies.json');
@@ -42,9 +42,23 @@ const getEventId = (url) => {
 const likeEvent = async (url) => {
   const eventId = getEventId(url);
   const mobileUrl = `https://m.facebook.com/events/${eventId}`;
-  const browser = await puppeteer.launch({
-    headless: true,
-  });
+
+  const args = [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-infobars',
+    '--window-position=0,0',
+    '--ignore-certifcate-errors',
+    '--ignore-certifcate-errors-spki-list',
+  ];
+
+  const options = {
+    args,
+    headless: false,
+    ignoreHTTPSErrors: true,
+  };
+
+  const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
   if (Object.keys(cookies).length) await page.setCookie(...cookies);
   else await loginToFacebook(page);
@@ -60,7 +74,7 @@ const goToEventAndClickInterested = async (mobileUrl, page) => {
 };
 
 const loginToFacebook = async (page) => {
-  await page.goto('https://www.facebook.com/login/', { waitUntil: 'networkidle0' });
+  await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle0' });
   await page.type('#email', FB_USERNAME, { delay: 1 });
   await page.type('#pass', FB_PASSWORD, { delay: 1 });
   await page.click('#loginbutton');

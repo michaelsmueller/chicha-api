@@ -51,20 +51,11 @@ const likeEvent = async (url) => {
 
   const options = {
     args,
-    headless: false,
+    headless: true,
   };
 
-  try {
-    const browser = await puppeteer.launch(options);
-  } catch (error) {
-    console.log('error launching browser with options', options);
-  }
-
-  try {
-    const page = await browser.newPage();
-  } catch (error) {
-    console.log('error opening new page', options);
-  }
+  const browser = await puppeteer.launch(options);
+  const page = await browser.newPage();
 
   if (Object.keys(cookies).length) {
     console.log('setting cookies', cookies);

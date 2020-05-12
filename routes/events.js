@@ -33,9 +33,15 @@ router.post('/', checkURLNotEmpty, async (req, res, next) => {
 		if (existingEvent) {
 			return res.status(409).json({ code: 'event-exists', event: existingEvent });
 		} else {
-			const data = await getEventData(url);
-			await Event.create({ creator: currentUser, data });
-			return res.status(201).json({ code: 'event-created', event: data });
+			getEventData(url)
+				.then (async (data) => {
+					console.log('data returned', data);
+					await Event.create({ creator: currentUser, data });
+					return res.status(201).json({ code: 'event-created', event: data });
+				})
+				.catch ((error) => {
+					console.log(error);
+				})
 		}
 	} catch (error) {
 		next(error);

@@ -85,12 +85,12 @@ const loginToFacebook = async (page) => {
   } catch (error) {
     console.log('error navigating to Facebook login');
   }
-  await page.screenshot({path: 'prelogin.png'});
+  // await page.screenshot({path: 'prelogin.png'});
   await page.type('#email', FB_USERNAME, { delay: 1 });
   await page.type('#pass', FB_PASSWORD, { delay: 1 });
   await page.click('#loginbutton');
   await page.waitFor(5000);
-  await page.screenshot({path: 'postlogin.png'});
+  // await page.screenshot({path: 'postlogin.png'});
   await writeCookies(page);
 }
 

@@ -63,3 +63,4 @@ typings/
 # mac files
 .DS_Store
 
+cookies.json

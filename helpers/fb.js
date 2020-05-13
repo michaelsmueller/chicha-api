@@ -1,6 +1,6 @@
-const puppeteer = require('puppeteer');
-// const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-// puppeteer.use(StealthPlugin());
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin());
 
 const fs = require('fs');
 const cookies = require('../cookies.json');
@@ -27,7 +27,7 @@ const getEventData = async (url) => {
 
 const getEvent = (url) => {
   const eventId = getEventId(url);
-  const FIELDS = [ 'name', 'cover', 'attending_count', 'interested_count', 'description', 'start_time', 'end_time', 'place' ];
+  const FIELDS = [ 'name', 'cover', 'attending_count', 'interested_count', 'description', 'start_time', 'end_time', 'place', 'ticket_uri' ];
   const requestUrl = `https://graph.facebook.com/${eventId}?fields=${FIELDS}&access_token=${FB_TOKEN}`;
   return axios.get(requestUrl);
 };
@@ -53,11 +53,12 @@ const likeEvent = async (url) => {
 
   const options = {
     args,
-    headless: true,
+    headless: false,
   };
 
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
+  await page.setViewport({ width: 800, height: 600 })
 
   if (Object.keys(cookies).length) {
     console.log('setting cookies', cookies);

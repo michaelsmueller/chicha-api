@@ -18,6 +18,7 @@ const eventSchema = new Schema(
 			description: { type: String },
 			start_time: { type: Date },
 			end_time: { type: Date},
+			ticket_uri: { type: String },
 			place: {
 				name: { type: String },
 				location: {

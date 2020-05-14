@@ -16,6 +16,16 @@ const checkUsernameAndPasswordNotEmpty = (req, res, next) => {
 	}
 };
 
+const checkNameNotEmpty = (req, res, next) => {
+	const { data: { name } } = req.body;
+	if (name !== '') {
+		res.locals.data = req.body;
+		next();
+	} else {
+		res.status(422).json({ code: 'validation' });
+	}
+};
+
 const checkURLNotEmpty = (req, res, next) => {
 	const { url } = req.body;
 	if (url !== '') {
@@ -28,6 +38,7 @@ const checkURLNotEmpty = (req, res, next) => {
 
 module.exports = {
 	checkIfLoggedIn,
-	checkUsernameAndPasswordNotEmpty,
+	checkNameNotEmpty,
 	checkURLNotEmpty,
+	checkUsernameAndPasswordNotEmpty,
 };

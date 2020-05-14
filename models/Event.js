@@ -15,9 +15,12 @@ const eventSchema = new Schema(
 			},
 			attending_count: { type: Number },
 			interested_count: { type: Number },
-			description: { type: String },
 			start_time: { type: Date },
 			end_time: { type: Date},
+<<<<<<< HEAD
+=======
+			description: { type: String },
+>>>>>>> c7d03e02a095cb6b08dfc0f984f4514e6df00cb2
 			ticket_uri: { type: String },
 			place: {
 				name: { type: String },

@@ -1,5 +1,5 @@
 const express = require('express');
-const { checkURLNotEmpty } = require('../middlewares');
+const { checkNameNotEmpty, checkURLNotEmpty } = require('../middlewares');
 const { getEventData, getEventId } = require('../helpers/fb');
 const Event = require('../models/Event');
 
@@ -19,6 +19,17 @@ router.get('/:id', async (req, res, next) => {
 	try {
 		const event = await Event.findById(id);
 		return res.json({ code: 'event-read', event });
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.put('/:id', checkNameNotEmpty, async (req, res, next) => {
+	const { id } = req.params;
+	const { data } = res.locals;
+	try {
+		await Event.findByIdAndUpdate(id, data);
+		return res.status(201).json({ code: 'event-updated', event: data });
 	} catch (error) {
 		next(error);
 	}

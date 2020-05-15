@@ -6,6 +6,16 @@ const checkIfLoggedIn = (req, res, next) => {
 	}
 };
 
+const checkUsernameNotEmpty = (req, res, next) => {
+	const { username } = req.body;
+	if (username !== '') {
+		res.locals.user = req.body;
+		next();
+	} else {
+		res.status(422).json({ code: 'validation' });
+	}
+};
+
 const checkUsernameAndPasswordNotEmpty = (req, res, next) => {
 	const { username, password } = req.body;
 	if (username !== '' && password !== '') {
@@ -40,5 +50,6 @@ module.exports = {
 	checkIfLoggedIn,
 	checkNameNotEmpty,
 	checkURLNotEmpty,
+	checkUsernameNotEmpty,
 	checkUsernameAndPasswordNotEmpty,
 };

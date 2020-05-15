@@ -52,4 +52,14 @@ router.put('/:id', checkUsernameNotEmpty, async (req, res, next) => {
 	}
 });
 
+router.delete('/:id', async (req, res, next) => {
+	const { id } = req.params;
+	try {
+		await User.findByIdAndDelete(id);
+		return res.status(200).json({ code: 'event-deleted', id });
+	} catch (error) {
+		next(error);
+	}
+});
+
 module.exports = router;

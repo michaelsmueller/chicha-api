@@ -40,7 +40,6 @@ const getEventId = (url) => {
 }
 
 const likeEvent = async (url) => {
-  console.log('likeEvent');
   const eventId = getEventId(url);
   const mobileUrl = `https://m.facebook.com/events/${eventId}`;
 

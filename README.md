@@ -64,7 +64,7 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 	username: { type: String, required: true, unique: true, trim: true },
 	hashed_password: { type: String, required: true },
 	image: { type: String },
-	description: { type: String },
+	bio: { type: String },
 	url: { type: String },
 	points: { type: Number },
 	balance: { type: Number },

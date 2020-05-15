@@ -1,5 +1,5 @@
 const express = require('express');
-const { checkNameNotEmpty, checkURLNotEmpty } = require('../middlewares');
+const { checkEventNameNotEmpty, checkEventURLNotEmpty } = require('../middlewares');
 const { getEventData, getEventId } = require('../helpers/fb');
 const Event = require('../models/Event');
 
@@ -24,7 +24,7 @@ router.get('/:id', async (req, res, next) => {
 	}
 });
 
-router.put('/:id', checkNameNotEmpty, async (req, res, next) => {
+router.put('/:id', checkEventNameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
 	const { data } = res.locals;
 	try {
@@ -35,7 +35,7 @@ router.put('/:id', checkNameNotEmpty, async (req, res, next) => {
 	}
 });
 
-router.post('/', checkURLNotEmpty, async (req, res, next) => {
+router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 	const { currentUser  } = req.session;
 	const { url } = res.locals.event;
 	try {

@@ -27,6 +27,8 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id', checkEventNameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
 	const { data } = res.locals;
+	// console.log('start_time', data.data.start_time);
+	// console.log('end_time', data.data.end_time);
 	try {
 		await Event.findByIdAndUpdate(id, data);
 		return res.status(201).json({ code: 'event-updated', event: data });

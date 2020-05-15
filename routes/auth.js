@@ -1,9 +1,8 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const { checkUsernameAndPasswordNotEmpty } = require('../middlewares');
 const User = require('../models/User');
+const encrypt = require('../helpers/encrypt');
 
-const bcryptSalt = 10;
 const router = express.Router();
 
 router.get('/whoami', (req, res, next) => {
@@ -21,7 +20,7 @@ router.post('/signin', checkUsernameAndPasswordNotEmpty, async (req, res, next) 
 		if (!user) {
 			return res.status(401).json({ code: 'not-authorized' });
 		}
-		if (bcrypt.compareSync(password, user.hashed_password)) {
+		if (encrypt.compareSync(password, user.hashed_password)) {
 			req.session.currentUser = user;
 			return res.json(user);
 		}

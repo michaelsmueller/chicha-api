@@ -27,8 +27,6 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id', checkEventNameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
 	const { data } = res.locals;
-	// console.log('start_time', data.data.start_time);
-	// console.log('end_time', data.data.end_time);
 	try {
 		await Event.findByIdAndUpdate(id, data);
 		return res.status(201).json({ code: 'event-updated', event: data });
@@ -49,7 +47,7 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 			getEventData(url)
 				.then (async (data) => {
 					console.log('data returned', data);
-					await Event.create({ creator: currentUser, data });
+					await Event.create({ creator: currentUser, upvotes: 0, downvotes: 0, data });
 					return res.status(201).json({ code: 'event-created', event: data });
 				})
 				.catch ((error) => {
@@ -70,5 +68,11 @@ router.delete('/:id', async (req, res, next) => {
 		next(error);
 	}
 });
+
+router.patch('/vote', async (req, res, next) => {
+	const { id, direction } = req.body;
+	console.log(`voting id ${id} direction ${direction}`);
+	return res.status(200);
+})
 
 module.exports = router;

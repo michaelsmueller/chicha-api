@@ -50,7 +50,7 @@ app.use(
 		secret: process.env.SECRET_SESSION,
 		resave: true,
 		saveUninitialized: true,
-		name: 'ironhack',
+		name: process.env.COOKIE_NAME,
 		cookie: {
 			maxAge: 24 * 60 * 60 * 1000,
 		},

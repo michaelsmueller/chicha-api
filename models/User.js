@@ -11,7 +11,11 @@ const userSchema = new Schema(
 		url: { type: String },
 		points: { type: Number },
 		balance: { type: Number },
-		vouchers: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ]
+		vouchers: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ],
+		votes: [{
+			event: { type: Schema.Types.ObjectId, ref: 'Event' },
+			direction: { type: Number },
+		}],
 	},
 	{
 		timestamps: {

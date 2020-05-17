@@ -12,10 +12,13 @@ const userSchema = new Schema(
 		points: { type: Number },
 		balance: { type: Number },
 		vouchers: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ],
-		votes: [{
-			event: { type: Schema.Types.ObjectId, ref: 'Event' },
-			direction: { type: Number },
-		}],
+		votes: [ 
+			{
+				_id: false,
+				event: { type: Schema.Types.ObjectId, ref: 'Event' },
+				vote: { type: Number },
+			} 
+		],
 	},
 	{
 		timestamps: {

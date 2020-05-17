@@ -2,6 +2,8 @@ const express = require('express');
 const { checkEventNameNotEmpty, checkEventURLNotEmpty } = require('../middlewares');
 const { getEventData, getEventId } = require('../helpers/fb');
 const Event = require('../models/Event');
+const User = require('../models/User');
+const ObjectID = require('mongodb').ObjectID;
 
 const router = express.Router();
 
@@ -29,7 +31,7 @@ router.put('/:id', checkEventNameNotEmpty, async (req, res, next) => {
 	const { data } = res.locals;
 	try {
 		await Event.findByIdAndUpdate(id, data);
-		return res.status(201).json({ code: 'event-updated', event: data });
+		return res.status(200).json({ code: 'event-updated', event: data });
 	} catch (error) {
 		next(error);
 	}
@@ -47,7 +49,7 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 			getEventData(url)
 				.then (async (data) => {
 					console.log('data returned', data);
-					await Event.create({ creator: currentUser, upvotes: 0, downvotes: 0, data });
+					await Event.create({ creator: currentUser, data });
 					return res.status(201).json({ code: 'event-created', event: data });
 				})
 				.catch ((error) => {
@@ -71,8 +73,24 @@ router.delete('/:id', async (req, res, next) => {
 
 router.patch('/vote', async (req, res, next) => {
 	const { id, direction } = req.body;
-	console.log(`voting id ${id} direction ${direction}`);
-	return res.status(200);
+	const { currentUser  } = req.session;
+	console.log(`userId ${JSON.stringify(currentUser._id)} voting event id ${id} in direction ${direction}`);
+	try {
+		const vote = {
+			event: ObjectID(id),
+			vote: direction,
+		};
+		console.log('voting', vote);
+		// await User.findByIdAndUpdate(
+		// 	{ _id: currentUser._id},
+		// 	{ $push: { votes: vote } },
+		// );
+
+		// await Event.findByIdAndUpdate(id, { $inc: { votes: direction } });
+		return res.status(200).json({ code: 'vote-counted', direction });
+	} catch (error) {
+		next(error);
+	}
 })
 
 module.exports = router;

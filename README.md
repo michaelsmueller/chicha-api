@@ -68,7 +68,11 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 	url: { type: String },
 	points: { type: Number },
 	balance: { type: Number },
-	vouchers: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ]
+	vouchers: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ],
+		votes: [{
+			event: { type: Schema.Types.ObjectId, ref: 'Event' },
+			direction: { type: Number },
+		}],
 },
 ```
 

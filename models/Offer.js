@@ -9,6 +9,12 @@ const offerSchema = new Schema(
 		description: { type: String },
 		point_cost: { type: Number },
 	},
+	{
+		timestamps: {
+			createdAt: 'created_at',
+			updatedAt: 'updated_at',
+		},
+	}
 );
 
 const Offer = mongoose.model('Offer', offerSchema);

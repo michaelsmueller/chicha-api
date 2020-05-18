@@ -27,6 +27,7 @@ mongoose
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/users');
 const eventRouter = require('./routes/events');
+const voteRouter = require('./routes/votes');
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use(
 app.use('/', authRouter);
 app.use('/users', userRouter);
 app.use('/events', eventRouter);
+app.use('/votes', voteRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

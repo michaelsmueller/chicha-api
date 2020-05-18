@@ -76,17 +76,37 @@ router.patch('/vote', async (req, res, next) => {
 	const { currentUser  } = req.session;
 	console.log(`userId ${JSON.stringify(currentUser._id)} voting event id ${id} in direction ${direction}`);
 	try {
+
 		const vote = {
 			event: ObjectID(id),
 			vote: direction,
 		};
+	
+		// need to get vote state ... User vote state
+
+		// await Event.findByIdAndUpdate(id, { $inc: { votes: direction } });
+
 		console.log('voting', vote);
+	
+		// add event to user
 		// await User.findByIdAndUpdate(
 		// 	{ _id: currentUser._id},
 		// 	{ $push: { votes: vote } },
 		// );
 
-		// await Event.findByIdAndUpdate(id, { $inc: { votes: direction } });
+		// change user's event vote
+		// await User.findOneAndUpdate(
+		// 	{ _id: currentUser._id, 'votes.event': ObjectID(id) },
+		// 	{ $set: { 'votes.$.vote': -1 } }
+		// );
+
+		// remove event from user
+		// await User.findByIdAndUpdate(
+		// 	{ _id: currentUser._id},
+		// 	{ $pull: { votes: { 'event': ObjectID(id) } } }
+		// );
+
+
 		return res.status(200).json({ code: 'vote-counted', direction });
 	} catch (error) {
 		next(error);

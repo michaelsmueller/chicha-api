@@ -5,13 +5,11 @@ const { Schema } = mongoose;
 const eventSchema = new Schema(
 	{
 		creator: { type: Schema.Types.ObjectId, ref: 'User' },
-		votes: { type: Number, min: 0 },
+		votes: { type: Number, default: 0 },
 		data: {
 			id: { type: String },
 			name: { type: String, required: true },
-			cover: {
-				source: { type: String }
-			},
+			cover: { source: { type: String } },
 			attending_count: { type: Number },
 			interested_count: { type: Number },
 			start_time: { type: Date },

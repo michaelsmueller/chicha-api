@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const eventSchema = new Schema(
 	{
 		creator: { type: Schema.Types.ObjectId, ref: 'User' },
-		votes: { type: Number },
+		votes: { type: Number, min: 0 },
 		data: {
 			id: { type: String },
 			name: { type: String, required: true },

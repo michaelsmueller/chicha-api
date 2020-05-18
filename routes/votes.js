@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
 	const { currentUser } = req.session;
-	console.log('currentUser', currentUser);
 	try {
 		const votes = await Vote.find();
 		return res.json({ code: 'votes-read', votes });
@@ -24,6 +23,7 @@ router.post('/', async (req, res, next) => {
 			event: ObjectID(eventId),
 			direction,
 		});
+		// await Event.findByIdAndUpdate(id, { $inc: { votes: direction } });
 		return res.status(200).json({ code: 'vote-created', newVote });
 	} catch (error) {
 		next(error);

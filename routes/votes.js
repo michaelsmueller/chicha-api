@@ -1,6 +1,7 @@
 const express = require('express');
 const Vote = require('../models/Vote');
-const ObjectID = require('mongodb').ObjectID;
+const Event = require('../models/Event');
+const { ObjectID } = require('mongodb');
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.post('/', async (req, res, next) => {
 			event: ObjectID(eventId),
 			direction,
 		});
-		// await Event.findByIdAndUpdate(id, { $inc: { votes: direction } });
+		await Event.findByIdAndUpdate(eventId, { $inc: { votes: direction } });
 		return res.status(200).json({ code: 'vote-created', newVote });
 	} catch (error) {
 		next(error);
@@ -32,9 +33,10 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
 	const { id } = req.params;
-	const { direction } = req.body;
+	const { eventId, direction } = req.body;
 	try {
 		await Vote.findByIdAndUpdate(id, { direction });
+		await Event.findByIdAndUpdate(eventId, { $inc: { votes: direction } });
 		return res.status(201).json({ code: 'vote-changed', direction });
 	} catch (error) {
 		next(error);
@@ -43,6 +45,8 @@ router.put('/:id', async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
 	const { id } = req.params;
+	const { eventid: eventId, direction } = req.query;
+	await Event.findByIdAndUpdate(eventId, { $inc: { votes: direction } });
 	try {
 		await Vote.findByIdAndDelete(id);
 		return res.status(200).json({ code: 'vote-removed', id });

@@ -19,16 +19,27 @@ router.post('/', async (req, res, next) => {
 	const { eventId, direction } = req.body;
 	const { currentUser: { _id: userId } } = req.session;
 	try {
-		await Vote.create({
+		const newVote = await Vote.create({
 			voter: ObjectID(userId),
 			event: ObjectID(eventId),
 			direction,
 		});
-		return res.status(200).json({ code: 'vote-created', direction });
+		return res.status(200).json({ code: 'vote-created', newVote });
 	} catch (error) {
 		next(error);
 	}
 })
+
+router.put('/:id', async (req, res, next) => {
+	const { id } = req.params;
+	const { direction } = req.body;
+	try {
+		await Vote.findByIdAndUpdate(id, { direction });
+		return res.status(201).json({ code: 'vote-changed', direction });
+	} catch (error) {
+		next(error);
+	}
+});
 
 router.delete('/:id', async (req, res, next) => {
 	const { id } = req.params;

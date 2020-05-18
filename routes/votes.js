@@ -16,14 +16,28 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-	const { id: eventId, direction } = req.body;
+	const { eventId, direction } = req.body;
 	const { currentUser: { _id: userId } } = req.session;
 	try {
-		await Vote.create({ voter: ObjectID(userId), event: ObjectID(eventId), direction });
+		await Vote.create({
+			voter: ObjectID(userId),
+			event: ObjectID(eventId),
+			direction,
+		});
 		return res.status(200).json({ code: 'vote-created', direction });
 	} catch (error) {
 		next(error);
 	}
 })
+
+router.delete('/:id', async (req, res, next) => {
+	const { id } = req.params;
+	try {
+		await Vote.findByIdAndDelete(id);
+		return res.status(200).json({ code: 'vote-removed', id });
+	} catch (error) {
+		next(error);
+	}
+});
 
 module.exports = router;

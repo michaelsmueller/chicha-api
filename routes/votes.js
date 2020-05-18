@@ -6,9 +6,9 @@ const { ObjectID } = require('mongodb');
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-	const { currentUser } = req.session;
+	const { currentUser: { _id: voter } } = req.session;
 	try {
-		const votes = await Vote.find();
+		const votes = await Vote.find({ voter });
 		return res.json({ code: 'votes-read', votes });
 	} catch (error) {
 		next(error);

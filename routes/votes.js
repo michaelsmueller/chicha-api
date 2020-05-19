@@ -36,7 +36,7 @@ router.put('/:id', async (req, res, next) => {
 	const { eventId, direction } = req.body;
 	try {
 		await Vote.findByIdAndUpdate(id, { direction });
-		await Event.findByIdAndUpdate(eventId, { $inc: { votes: direction } });
+		await Event.findByIdAndUpdate(eventId, { $inc: { votes: 2 * direction } });
 		return res.status(201).json({ code: 'vote-changed', direction });
 	} catch (error) {
 		next(error);

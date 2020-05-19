@@ -3,6 +3,7 @@ const Event = require('../models/Event');
 const User = require('../models/User');
 const { checkEventNameNotEmpty, checkEventURLNotEmpty } = require('../middlewares');
 const { getEventData, getEventId } = require('../helpers/fb');
+const { awardUser } = require('../helpers/awardPoints');
 
 const router = express.Router();
 
@@ -49,7 +50,7 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 				.then (async (data) => {
 					console.log('data returned', data);
 					await Event.create({ creator: currentUser, data });
-					await User.findByIdAndUpdate(userId, { $inc: { points: 10 } });
+					awardUser(userId, 10);
 					return res.status(201).json({ code: 'event-created', event: data });
 				})
 				.catch ((error) => {

@@ -3,15 +3,9 @@ const Vote = require('../models/Vote');
 const Event = require('../models/Event');
 const User = require('../models/User');
 const { ObjectID } = require('mongodb');
+const { awardEventCreator, awardUser, awardVotedEvent } = require('../helpers/awardPoints');
 
 const router = express.Router();
-
-// TO DO REFACTOR FUNCTION LIKE FOLLOWS
-// const awardEventCreator = (eventId) => {
-// 	const { creator: creatorId } = await Event.findById(eventId).select({ _id: 0, creator: 1 });
-// 	const creator = await User.findById(creatorId);
-// 	if (creator) await User.findByIdAndUpdate(creatorId, { $inc: { points: direction } });
-// };
 
 // create vote
 router.post('/', async (req, res, next) => {
@@ -19,14 +13,9 @@ router.post('/', async (req, res, next) => {
 	const { currentUser: { _id: userId } } = req.session;
 	try {
 		const newVote = await Vote.create({ voter: ObjectID(userId), event: ObjectID(eventId), direction });
-
-		await Event.findByIdAndUpdate(eventId, { $inc: { votes: direction } });
-		await User.findByIdAndUpdate(userId, { $inc: { points: 1 } });
-
-		const { creator: creatorId } = await Event.findById(eventId).select({ _id: 0, creator: 1 });
-		const creator = await User.findById(creatorId);
-		if (creator) await User.findByIdAndUpdate(creatorId, { $inc: { points: direction } });
-
+		awardVotedEvent(eventId, direction);
+		awardUser(userId, 1);
+		awardEventCreator(eventId, direction);
 		return res.status(200).json({ code: 'vote-created', newVote });
 	} catch (error) {
 		next(error);
@@ -50,12 +39,8 @@ router.put('/:id', async (req, res, next) => {
 	const { eventId, direction } = req.body;
 	try {
 		await Vote.findByIdAndUpdate(id, { direction });
-		await Event.findByIdAndUpdate(eventId, { $inc: { votes: 2 * direction } });
-
-		const { creator: creatorId } = await Event.findById(eventId).select({ _id: 0, creator: 1 });
-		const creator = await User.findById(creatorId);
-		if (creator) await User.findByIdAndUpdate(creatorId, { $inc: { points: 2 * direction } });
-
+		awardVotedEvent(eventId, 2 * direction);
+		awardEventCreator(eventId, 2 * direction);
 		return res.status(201).json({ code: 'vote-changed', direction });
 	} catch (error) {
 		next(error);
@@ -69,14 +54,9 @@ router.delete('/:id', async (req, res, next) => {
 	const { currentUser: { _id: userId } } = req.session;
 	try {
 		await Vote.findByIdAndDelete(id);
-
-		await Event.findByIdAndUpdate(eventId, { $inc: { votes: direction } });
-		await User.findByIdAndUpdate(userId, { $inc: { points: -1 } });
-
-		const { creator: creatorId } = await Event.findById(eventId).select({ _id: 0, creator: 1 });
-		const creator = await User.findById(creatorId);
-		if (creator) await User.findByIdAndUpdate(creatorId, { $inc: { points: direction } });
-
+		awardVotedEvent(eventId, direction);
+		awardUser(userId, -1);
+		awardEventCreator(eventId, direction);
 		return res.status(200).json({ code: 'vote-removed', id });
 	} catch (error) {
 		next(error);

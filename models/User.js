@@ -9,8 +9,8 @@ const userSchema = new Schema(
 		image: { type: String },
 		bio: { type: String },
 		url: { type: String },
-		points: { type: Number },
-		balance: { type: Number },
+		points: { type: Number, default: 0 },
+		balance: { type: Number, default: 0 },
 		vouchers: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ],
 	},
 	{

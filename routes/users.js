@@ -1,7 +1,7 @@
 const express = require('express');
-const { checkUsernameNotEmpty, checkUsernameAndPasswordNotEmpty } = require('../middlewares');
 const User = require('../models/User');
 const encrypt = require('../helpers/encrypt');
+const { checkUsernameNotEmpty, checkUsernameAndPasswordNotEmpty } = require('../middlewares');
 
 const router = express.Router();
 

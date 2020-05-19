@@ -1,7 +1,8 @@
 const express = require('express');
+const Event = require('../models/Event');
+const User = require('../models/User');
 const { checkEventNameNotEmpty, checkEventURLNotEmpty } = require('../middlewares');
 const { getEventData, getEventId } = require('../helpers/fb');
-const Event = require('../models/Event');
 
 const router = express.Router();
 

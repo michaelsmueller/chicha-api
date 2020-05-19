@@ -19,6 +19,16 @@ router.post('/', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
 	}
 });
 
+router.get('/heavyweights', async (req, res, next) => {
+	try {
+		const heavyweights = await User.find().sort({ 'points': -1 });
+		console.log('heavyweights', heavyweights);
+		return res.json({ code: 'heavyweights-read', heavyweights });
+	} catch (error) {
+		next(error);
+	}
+});
+
 router.get('/:id', async (req, res, next) => {
 	const { id } = req.params;
 	try {

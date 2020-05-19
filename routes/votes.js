@@ -6,6 +6,13 @@ const { ObjectID } = require('mongodb');
 
 const router = express.Router();
 
+// TO DO REFACTOR FUNCTION LIKE FOLLOWS
+// const awardEventCreator = (eventId) => {
+// 	const { creator: creatorId } = await Event.findById(eventId).select({ _id: 0, creator: 1 });
+// 	const creator = await User.findById(creatorId);
+// 	if (creator) await User.findByIdAndUpdate(creatorId, { $inc: { points: direction } });
+// };
+
 // create vote
 router.post('/', async (req, res, next) => {
 	const { eventId, direction } = req.body;

@@ -42,15 +42,17 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 	const { url } = res.locals.event;
 	try {
 		const eventId = getEventId(url).toString();
+		console.log('eventId', eventId);
 		const existingEvent = await Event.findOne({ 'data.id' : eventId } );
 		if (existingEvent) {
+			console.log('event exists');
 			return res.status(409).json({ code: 'event-exists', event: existingEvent });
 		} else {
 			getEventData(url)
 				.then (async (data) => {
 					console.log('data returned', data);
 					await Event.create({ creator: currentUser, data });
-					awardUser(userId, 10);
+					// awardUser(userId, 10);
 					return res.status(201).json({ code: 'event-created', event: data });
 				})
 				.catch ((error) => {

@@ -4,10 +4,10 @@ const { Schema } = mongoose;
 
 const offerSchema = new Schema(
 	{
-		merchant: { type: String },
+		partner: { type: String },
 		image: { type: String },
 		description: { type: String },
-		point_cost: { type: Number },
+		cost: { type: Number },
 	},
 	{
 		timestamps: {

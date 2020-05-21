@@ -52,7 +52,7 @@ const likeEvent = async (url) => {
 
   const options = {
     args,
-    headless: false,
+    headless: true,
   };
 
   const browser = await puppeteer.launch(options);

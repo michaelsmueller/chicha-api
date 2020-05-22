@@ -1,6 +1,7 @@
 const express = require('express');
 const Event = require('../models/Event');
 const User = require('../models/User');
+const { ObjectID } = require('mongodb');
 const { checkEventNameNotEmpty, checkEventURLNotEmpty } = require('../middlewares');
 const { getEventData, getEventId } = require('../helpers/fb');
 const { awardUser } = require('../helpers/awardPoints');
@@ -49,9 +50,10 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 			getEventData(url)
 				.then (async (data) => {
 					console.log('data returned', data);
-					await Event.create({ creator: currentUser, data });
+					const _id = new ObjectID();
+					await Event.create({ _id, creator: currentUser, data });
 					awardUser(userId, 10);
-					return res.status(201).json({ code: 'event-created', event: data });
+					return res.status(201).json({ code: 'event-created', event: data, _id });
 				})
 				.catch ((error) => {
 					console.log(error);

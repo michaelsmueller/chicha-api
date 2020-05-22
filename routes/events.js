@@ -49,7 +49,7 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 		} else {
 			getEventData(url)
 				.then (async (data) => {
-					console.log('data returned', data);
+					console.log('Facebook event data returned', data);
 					const _id = new ObjectID();
 					await Event.create({ _id, creator: currentUser, data });
 					awardUser(userId, 10);

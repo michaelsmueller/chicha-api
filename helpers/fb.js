@@ -78,18 +78,16 @@ const goToEventAndClickInterested = async (mobileUrl, page) => {
 };
 
 const loginToFacebook = async (page) => {
-  console.log('loginToFacebook');
   try {
     await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle0' });
   } catch (error) {
     console.log('error navigating to Facebook login');
   }
-  // await page.screenshot({path: 'prelogin.png'});
+  console.log('logging in to Facebook with user: ', FB_USERNAME);
   await page.type('#email', FB_USERNAME, { delay: 1 });
   await page.type('#pass', FB_PASSWORD, { delay: 1 });
   await page.click('#loginbutton');
   await page.waitFor(5000);
-  // await page.screenshot({path: 'postlogin.png'});
   await writeCookies(page);
 }
 

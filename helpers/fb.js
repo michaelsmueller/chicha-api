@@ -52,12 +52,12 @@ const likeEvent = async (url) => {
 
   const OPTIONS = {
     ARGS,
-    headless: true,
+    headless: false,
   };
 
   const browser = await puppeteer.launch(OPTIONS);
   const page = await browser.newPage();
-  // await page.setViewport({ width: 800, height: 600 })
+  await page.setViewport({ width: 800, height: 600 })
 
   if (Object.keys(cookies).length) {
     console.log('setting cookies', cookies);

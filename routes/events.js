@@ -44,20 +44,14 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 	try {
 		const eventId = getEventId(url).toString();
 		const existingEvent = await Event.findOne({ 'data.id' : eventId } );
-		if (existingEvent) {
-			return res.status(409).json({ code: 'event-exists', event: existingEvent });
-		} else {
-			getEventData(url)
-				.then (async (data) => {
-					console.log('Facebook event data returned', data);
-					const _id = new ObjectID();
-					await Event.create({ _id, creator: currentUser, data });
-					awardUser(userId, 10);
-					return res.status(201).json({ code: 'event-created', event: data, _id });
-				})
-				.catch ((error) => {
-					console.log(error);
-				})
+		if (existingEvent) return res.status(409).json({ code: 'event-exists', event: existingEvent });
+		else {
+			const data = await getEventData(url)
+			console.log('Facebook event data returned', data);
+			const _id = new ObjectID();
+			await Event.create({ _id, creator: currentUser, data });
+			awardUser(userId, 10);
+			return res.status(201).json({ code: 'event-created', event: data, _id });
 		}
 	} catch (error) {
 		next(error);

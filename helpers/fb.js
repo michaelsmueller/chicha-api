@@ -43,19 +43,19 @@ const likeEvent = async (url) => {
   const eventId = getEventId(url);
   const mobileUrl = `https://m.facebook.com/events/${eventId}`;
 
-  const ARGS = [
+  const args = [
     '--no-sandbox',
     '--disable-setuid-sandbox',
     '--disable-dev-shm-usage',
     '--single-process',
   ];
 
-  const OPTIONS = {
-    ARGS,
+  const options = {
+    args,
     headless: true,
   };
 
-  const browser = await puppeteer.launch(OPTIONS);
+  const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
   await page.setViewport({ width: 800, height: 600 })
 

@@ -43,21 +43,21 @@ const likeEvent = async (url) => {
   const eventId = getEventId(url);
   const mobileUrl = `https://m.facebook.com/events/${eventId}`;
 
-  const args = [
+  const ARGS = [
     '--no-sandbox',
     '--disable-setuid-sandbox',
     '--disable-dev-shm-usage',
     '--single-process',
   ];
 
-  const options = {
-    args,
+  const OPTIONS = {
+    ARGS,
     headless: true,
   };
 
-  const browser = await puppeteer.launch(options);
+  const browser = await puppeteer.launch(OPTIONS);
   const page = await browser.newPage();
-  await page.setViewport({ width: 800, height: 600 })
+  // await page.setViewport({ width: 800, height: 600 })
 
   if (Object.keys(cookies).length) {
     console.log('setting cookies', cookies);
@@ -67,7 +67,7 @@ const likeEvent = async (url) => {
   }
 
   await goToEventAndClickInterested(mobileUrl, page);
-  await page.waitFor(10000);
+  await page.waitFor(2000);
   browser.close();
 };
 
@@ -83,7 +83,7 @@ const loginToFacebook = async (page) => {
   } catch (error) {
     console.log('error navigating to Facebook login');
   }
-  console.log('logging in to Facebook with user: ', FB_USERNAME);
+  console.log('logging in to Facebook with user', FB_USERNAME);
   await page.type('#email', FB_USERNAME, { delay: 1 });
   await page.type('#pass', FB_PASSWORD, { delay: 1 });
   await page.click('#loginbutton');

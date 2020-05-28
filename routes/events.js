@@ -11,8 +11,8 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
 	try {
 		const events = await Event
-			.find({ 'data.start_time': { '$gte': new Date() }})
-			.sort({ 'votes': -1 });
+			.find({ 'data.start_time': { $gte: new Date() }})
+			.sort({ votes: -1 });
 		return res.json({ code: 'events-read', events });
 	} catch (error) {
 		next(error);

@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
 	try {
-		const events = await Event.find().sort('data.start_time');
+		const events = await Event.find().sort({ 'votes': -1 });
 		return res.json({ code: 'events-read', events });
 	} catch (error) {
 		next(error);

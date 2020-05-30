@@ -23,9 +23,11 @@ router.get('/search', async (req, res, next) => {
 	const { query } = req.query;
 	try {
 		const events = await Event
-			.find({ $text: { $search: query }})
+			.find({
+				$text: { $search: query },
+				'data.start_time': { $gte: new Date() },
+			})
 			.sort({ votes: -1 });
-		console.log('search results', events.length);
 		return res.json({ code: 'search-results-read', events });
 	} catch (error) {
 		next(error);

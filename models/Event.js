@@ -4,6 +4,9 @@ const { Schema } = mongoose;
 
 const eventSchema = new Schema(
 	{
+		temp: { 
+			sub: { type: String },
+		},
 		creator: { type: Schema.Types.ObjectId, ref: 'User' },
 		votes: { type: Number, default: 0 },
 		data: {
@@ -33,9 +36,16 @@ const eventSchema = new Schema(
 			createdAt: 'created_at',
 			updatedAt: 'updated_at',
 		},
-	}
+	},
+	{ autoIndex: false },
 );
 
+eventSchema.index({ '$**': 'text' });
+
 const Event = mongoose.model('Event', eventSchema);
+
+Event.on('index', (error) => {
+	if (error) console.log('Error:', error.message);
+});
 
 module.exports = Event;

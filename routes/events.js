@@ -19,6 +19,19 @@ router.get('/', async (req, res, next) => {
 	}
 });
 
+router.get('/search', async (req, res, next) => {
+	const { query } = req.query;
+	try {
+		const events = await Event
+			.find({ $text: { $search: query }})
+			.sort({ votes: -1 });
+		console.log('search results', events.length);
+		return res.json({ code: 'search-results-read', events });
+	} catch (error) {
+		next(error);
+	}
+});
+
 router.get('/:id', async (req, res, next) => {
 	const { id } = req.params;
 	try {

@@ -60,4 +60,15 @@ router.delete('/:id', async (req, res, next) => {
 	}
 });
 
+router.patch('/:id/coupons', async (req, res, next) => {
+	const { id } = req.params;
+	const offer = req.body;
+	try {
+		await User.findByIdAndUpdate(id, { $push: { coupons: { offer } } });
+		return res.status(201).json({ code: 'coupon-added', offer });
+	} catch (error) {
+		next(error);
+	}
+});
+
 module.exports = router;

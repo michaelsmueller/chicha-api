@@ -11,14 +11,14 @@ const userSchema = new Schema(
 		url: { type: String },
 		points: { type: Number, default: 0 },
 		balance: { type: Number, default: 0 },
-		coupons: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ],
+		coupons: [ 
+			{
+				offer: { type: Schema.Types.ObjectId, ref: 'Offer' },
+				createdAt: { type: Date, default: new Date() },
+			},
+		],
 	},
-	{
-		timestamps: {
-			createdAt: 'created_at',
-			updatedAt: 'updated_at',
-		},
-	}
+
 );
 
 const User = mongoose.model('User', userSchema);

@@ -64,11 +64,19 @@ router.patch('/:id/coupons', async (req, res, next) => {
 	const { id } = req.params;
 	const offer = req.body;
 	try {
-		await User.findByIdAndUpdate(id, { $push: { coupons: { offer } } });
+		await User.findByIdAndUpdate(id, {
+				$inc: { balance: -1 * offer.cost },
+				$push: { coupons: { offer } },
+			});
 		return res.status(201).json({ code: 'coupon-added', offer });
 	} catch (error) {
 		next(error);
 	}
 });
+
+
+const spendPoints = async (userId, points) => {
+	await User.findByIdAndUpdate(userId, { $inc: { balance: points } });
+}
 
 module.exports = router;

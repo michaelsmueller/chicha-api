@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
 	try {
-		const offers = await Offer.find().sort('cost');
+		const offers = await Offer.find().sort({ cost: -1 });
 		return res.json({ code: 'offers-read', offers });
 	} catch (error) {
 		next(error);

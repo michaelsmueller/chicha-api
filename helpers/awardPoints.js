@@ -19,5 +19,5 @@ const awardVotedEvent = async (eventId, amount) => {
 module.exports = {
   awardEventCreator,
   awardUser,
-  awardVotedEvent,
+	awardVotedEvent,
 };

@@ -45,7 +45,7 @@ eventSchema.index({ '$**': 'text' });
 const Event = mongoose.model('Event', eventSchema);
 
 Event.on('index', (error) => {
-	if (error) console.log('Error:', error.message);
+	if (error) console.log('Error creating index:', error.message);
 });
 
 module.exports = Event;

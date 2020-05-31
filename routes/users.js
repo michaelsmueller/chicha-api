@@ -31,7 +31,7 @@ router.get('/heavies', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
 	const { id } = req.params;
 	try {
-		const user = await User.findById(id);
+		const user = await User.findById(id).populate('coupons.offer')
 		return res.json({ code: 'user-read', user });
 	} catch (error) {
 		next(error);

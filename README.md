@@ -35,7 +35,7 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 |  PUT    | `/users/:id`          | update user            | `{ username, password, image, description, url }` |
 |  DELETE | `/users/:id`          | delete user            |                                    |
 |  GET    | `/users/heavies` | read heavies      |                                    |
-|  GET    | `/users/:id/vouchers` | read vouchers          |                                    |
+|  GET    | `/users/:id/coupons` | read coupons          |                                    |
 
 ### Event endpoints
     
@@ -68,7 +68,7 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 	url: { type: String },
 	points: { type: Number },
 	balance: { type: Number },
-	vouchers: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ],
+	coupons: [ { type: Schema.Types.ObjectId, ref: 'Offer' } ],
 		votes: [{
 			event: { type: Schema.Types.ObjectId, ref: 'Event' },
 			direction: { type: Number },

@@ -34,7 +34,7 @@ Crowdsource the best local events from knowledgable locals motivated to share an
 |  GET    | `/users/:id`          | read user              |                                    |
 |  PUT    | `/users/:id`          | update user            | `{ username, password, image, description, url }` |
 |  DELETE | `/users/:id`          | delete user            |                                    |
-|  GET    | `/users/heavyweights` | read heavyweights      |                                    |
+|  GET    | `/users/heavies` | read heavies      |                                    |
 |  GET    | `/users/:id/vouchers` | read vouchers          |                                    |
 
 ### Event endpoints

@@ -19,10 +19,10 @@ router.post('/', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
 	}
 });
 
-router.get('/heavyweights', async (req, res, next) => {
+router.get('/heavies', async (req, res, next) => {
 	try {
-		const heavyweights = await User.find().sort({ 'points': -1 });
-		return res.json({ code: 'heavyweights-read', heavyweights });
+		const heavies = await User.find().sort({ 'points': -1 });
+		return res.json({ code: 'heavies-read', heavies });
 	} catch (error) {
 		next(error);
 	}

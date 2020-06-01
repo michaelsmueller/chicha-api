@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User');
 const encrypt = require('../helpers/encrypt');
+const { ObjectID } = require('mongodb');
 const { checkUsernameNotEmpty, checkUsernameAndPasswordNotEmpty } = require('../middlewares');
 
 const router = express.Router();
@@ -28,7 +29,18 @@ router.get('/heavies', async (req, res, next) => {
 	}
 });
 
+router.get('/find', async (req, res, next) => {
+	const { coupon: couponId } = req.query;
+	try {
+		const user = await User.findOne({ 'coupons._id': ObjectID(couponId) });
+		return res.json({ code: 'user-found', user });
+	} catch (error) {
+		next(error);
+	}
+});
+
 router.get('/:id', async (req, res, next) => {
+	console.log('trying to get the fucking user');
 	const { id } = req.params;
 	try {
 		const user = await User.findById(id).populate('coupons.offer')
@@ -73,10 +85,5 @@ router.patch('/:id/coupons', async (req, res, next) => {
 		next(error);
 	}
 });
-
-
-const spendPoints = async (userId, points) => {
-	await User.findByIdAndUpdate(userId, { $inc: { balance: points } });
-}
 
 module.exports = router;

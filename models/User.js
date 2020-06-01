@@ -11,6 +11,7 @@ const userSchema = new Schema(
 		url: { type: String },
 		points: { type: Number, default: 0 },
 		balance: { type: Number, default: 0 },
+		partner: { type: Boolean, default: false },
 		coupons: [ 
 			{
 				offer: { type: Schema.Types.ObjectId, ref: 'Offer' },

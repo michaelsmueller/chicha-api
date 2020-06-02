@@ -32,15 +32,18 @@ router.get('/heavies', async (req, res, next) => {
 router.get('/find', async (req, res, next) => {
 	const { coupon: couponId } = req.query;
 	try {
-		const user = await User.findOne({ 'coupons._id': ObjectID(couponId) });
-		return res.json({ code: 'user-found', user });
+		const user = await User
+			.findOne({ 'coupons._id': ObjectID(couponId) })
+			.populate('coupons.offer');
+		const { _id: userId } = user;
+		const coupon = user.coupons.find((coupon) => coupon._id.toString() === couponId);
+		return res.json({ code: 'user-found', userId, coupon });
 	} catch (error) {
 		next(error);
 	}
 });
 
 router.get('/:id', async (req, res, next) => {
-	console.log('trying to get the fucking user');
 	const { id } = req.params;
 	try {
 		const user = await User.findById(id).populate('coupons.offer')
@@ -67,6 +70,19 @@ router.delete('/:id', async (req, res, next) => {
 	try {
 		await User.findByIdAndDelete(id);
 		return res.status(200).json({ code: 'event-deleted', id });
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.patch('/:id/coupons/:couponid', async (req, res, next) => {
+	const { id: _id, couponid: couponId } = req.params;
+	try {
+		await User.updateOne(
+			{ _id, 'coupons._id': couponId },
+			{ 'coupons.$.status': 'redeemed', 'coupons.$.redeemedOn': new Date() },
+		);
+		return res.status(201).json({ code: 'coupon-redeemed', couponId });
 	} catch (error) {
 		next(error);
 	}

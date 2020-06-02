@@ -80,7 +80,7 @@ router.delete('/:id', async (req, res, next) => {
 	const { currentUser: { _id: userId } } = req.session;
 	try {
 		await Event.findByIdAndDelete(id);
-		await User.findByIdAndUpdate(userId, { $inc: { points: -10 } });
+		await User.findByIdAndUpdate(userId, { $inc: { points: -10, balance: -10 } });
 		return res.status(200).json({ code: 'event-deleted', id });
 	} catch (error) {
 		next(error);

@@ -9,7 +9,7 @@ const awardEventCreator = async (eventId, amount) => {
 };
 
 const awardUser = async (userId, amount) => {
-	await User.findByIdAndUpdate(userId, { $inc: { points: amount } });
+	await User.findByIdAndUpdate(userId, { $inc: { points: amount, balance: amount } });
 };
 
 const awardVotedEvent = async (eventId, amount) => {

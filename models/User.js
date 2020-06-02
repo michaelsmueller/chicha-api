@@ -16,10 +16,11 @@ const userSchema = new Schema(
 			{
 				offer: { type: Schema.Types.ObjectId, ref: 'Offer' },
 				createdAt: { type: Date, default: new Date() },
+				status: { type: String, default: 'valid' },
+				redeemedOn: { type: Date },
 			},
 		],
 	},
-
 );
 
 const User = mongoose.model('User', userSchema);

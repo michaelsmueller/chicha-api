@@ -36,6 +36,7 @@ app.use(
 	cors({
 		credentials: true,
 		origin: [process.env.FRONTEND_DOMAIN],
+		allowedHeaders: ['x-requested-with', 'origin'],
 	})
 );
 app.use(logger('dev'));

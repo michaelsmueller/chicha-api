@@ -36,8 +36,7 @@ app.use(
 	cors({
 		credentials: true,
 		origin: [process.env.FRONTEND_DOMAIN],
-		allowedHeaders: '*',
-		allowedHeaders: [ 'Accept', 'Accept-Encoding', 'Accept-Language', 'Cookie', 'Connection', 'Host', 'If-None-Match', 'Origin', 'Referer', 'User-Agent', 'X-Requested-With' ]
+		// allowedHeaders: [ 'Accept', 'Accept-Encoding', 'Accept-Language', 'Cookie', 'Connection', 'Host', 'If-None-Match', 'Origin', 'Referer', 'User-Agent', 'X-Requested-With' ]
 	})
 );
 app.use(logger('dev'));
@@ -60,13 +59,6 @@ app.use(
 		},
 	})
 );
-
-app.use((req, res, next) => {
-	// console.log(`${req.method} ${req.url}`);
-	console.log(`Headers: `, req.headers);
-	if (req.method === 'OPTIONS') console.log('OPTIONS request', req);
-	next();
-});
 
 app.use('/', authRouter);
 app.use('/users', userRouter);

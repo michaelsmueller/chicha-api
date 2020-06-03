@@ -36,8 +36,8 @@ app.use(
 	cors({
 		credentials: true,
 		origin: [process.env.FRONTEND_DOMAIN],
-		allowedHeaders: [ 'accept', 'accept-encoding', 'accept-language', 'cookie', 'connection', 'host', 'if-none-match', 'origin', 'referer', 'user-agent', 'x-requested-with' ]
-		// allowedHeaders: ['Accept', 'Accept-Encoding', 'Accept-Language', 'Access-Control-Allow-Origin', 'Authorization', 'Cache-Control', 'Content-Type', 'DPR', 'Origin', 'Pragma', 'Referer', 'Save-Data', 'Sec-Fetch-Dest', 'Sec-Fetch-Mode', 'Sec-Fetch-Site', 'User-Agent', 'Viewport-Width', 'Width', 'X-Requested-With']
+		allowedHeaders: '*',
+		allowedHeaders: [ 'Accept', 'Accept-Encoding', 'Accept-Language', 'Cookie', 'Connection', 'Host', 'If-None-Match', 'Origin', 'Referer', 'User-Agent', 'X-Requested-With' ]
 	})
 );
 app.use(logger('dev'));

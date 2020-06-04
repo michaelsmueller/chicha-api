@@ -4,9 +4,6 @@ const { Schema } = mongoose;
 
 const eventSchema = new Schema(
 	{
-		temp: { 
-			sub: { type: String },
-		},
 		creator: { type: Schema.Types.ObjectId, ref: 'User' },
 		votes: { type: Number, default: 0 },
 		data: {

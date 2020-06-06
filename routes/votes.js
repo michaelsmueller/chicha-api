@@ -24,6 +24,8 @@ router.post('/', async (req, res, next) => {
 
 // read (get) vote
 router.get('/', async (req, res, next) => {
+	// console.log('GET /votes, res.locals', res.locals);
+	// console.log('\n\nGET /votes, req.session', req.session);
 	const { currentUser: { _id: voter } } = res.locals;
 	try {
 		const votes = await Vote.find({ voter });

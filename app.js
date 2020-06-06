@@ -62,7 +62,9 @@ app.use(
 
 app.use((req, res, next) => {
   if (req.session.currentUser) {
-    res.locals.currentUser = req.session.currentUser;
+		res.locals.currentUser = req.session.currentUser;
+		console.log('app middleware, req.session', req.session);
+		console.log('app middleware, res.locals', res.locals);
   }
   next();
 });

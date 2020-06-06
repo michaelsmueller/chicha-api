@@ -9,6 +9,8 @@ const { awardUser } = require('../helpers/awardPoints');
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
+	console.log('GET /events, res.locals', res.locals);
+	console.log('GET /events, req.session', req.session);
 	try {
 		const events = await Event
 			.find({ 'data.start_time': { $gte: new Date() }})

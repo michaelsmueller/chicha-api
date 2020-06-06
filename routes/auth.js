@@ -22,6 +22,7 @@ router.post('/signin', checkUsernameAndPasswordNotEmpty, async (req, res, next) 
 		}
 		if (encrypt.compareSync(password, user.hashed_password)) {
 			req.session.currentUser = user;
+			res.locals.currentUser = req.session.currentUser;
 			return res.json(user);
 		}
 		return res.status(401).json({ code: 'not-authorized' });

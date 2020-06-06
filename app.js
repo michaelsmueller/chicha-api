@@ -60,6 +60,13 @@ app.use(
 	})
 );
 
+app.use((req, res, next) => {
+  if (req.session.currentUser) {
+    res.locals.currentUser = req.session.currentUser;
+  }
+  next();
+});
+
 app.use('/', authRouter);
 app.use('/users', userRouter);
 app.use('/events', eventRouter);

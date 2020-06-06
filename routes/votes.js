@@ -10,7 +10,7 @@ const router = express.Router();
 // create vote
 router.post('/', async (req, res, next) => {
 	const { eventId, direction } = req.body;
-	const { currentUser: { _id: userId } } = req.session;
+	const { currentUser: { _id: userId } } = res.locals;
 	try {
 		const newVote = await Vote.create({ voter: ObjectID(userId), event: ObjectID(eventId), direction });
 		awardVotedEvent(eventId, direction);
@@ -24,7 +24,7 @@ router.post('/', async (req, res, next) => {
 
 // read (get) vote
 router.get('/', async (req, res, next) => {
-	const { currentUser: { _id: voter } } = req.session;
+	const { currentUser: { _id: voter } } = res.locals;
 	try {
 		const votes = await Vote.find({ voter });
 		return res.json({ code: 'votes-read', votes });
@@ -51,7 +51,7 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
 	const { id } = req.params;
 	const { eventid: eventId, direction } = req.query;
-	const { currentUser: { _id: userId } } = req.session;
+	const { currentUser: { _id: userId } } = res.locals;
 	try {
 		await Vote.findByIdAndDelete(id);
 		awardVotedEvent(eventId, direction);

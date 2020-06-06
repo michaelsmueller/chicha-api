@@ -56,7 +56,7 @@ router.put('/:id', checkEventNameNotEmpty, async (req, res, next) => {
 });
 
 router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
-	const { currentUser, currentUser: { _id: userId }  } = req.session;
+	const { currentUser, currentUser: { _id: userId }  } = res.locals;
 	const { url } = res.locals.event;
 	try {
 		const eventId = getEventId(url).toString();
@@ -77,7 +77,7 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
 	const { id } = req.params;
-	const { currentUser: { _id: userId } } = req.session;
+	const { currentUser: { _id: userId } } = res.locals;
 	try {
 		await Event.findByIdAndDelete(id);
 		await User.findByIdAndUpdate(userId, { $inc: { points: -10, balance: -10 } });

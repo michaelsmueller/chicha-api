@@ -14,6 +14,7 @@ router.post('/', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
 		const hashed_password = encrypt.hashPassword(password);
 		const newUser = await User.create({ username, hashed_password });
 		req.session.currentUser = newUser;
+		res.locals.currentUser = req.session.currentUser;
 		return res.status(201).json(newUser);
 	} catch (error) {
 		next(error);

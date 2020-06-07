@@ -23,44 +23,57 @@ Chicha connects users, tastemakers and local businesses:
 - **Tastemakers** such as artists, bloggers and promoters ("heavies") who share the most gain visibility and influence.
 - **Local businesses** attract more customers through coupons that users and tastemakers earn on the platform.
 
+Check the GitHub frontend repository (see link below) for more info on how the website works.
+
 ## Routes
 
 ### Auth endpoints
 
-| Method  | Path                  | Description       | Body                              |
+| Method  | Path                  | Description       | Body                               |
 | :----:  | ----------------      | ----------------  | ------------------------------     |
 |  GET    | `/whoami`             | who am I          |                                    |
-|  POST   | `/signin`             | sign in user      | `{ username, password }`    |
+|  POST   | `/signin`             | sign in user      | `{ username, password }`           |
 |  GET    | `/logout`             | logout session    |                                    |
 
 ### User endpoints
 
 | Method  | Path                  | Description            | Body                               |
 | :----:  | ----------------      | ----------------       | ------------------------------     |
-|  POST   | `/users/`             | create user            | `{ username, password, image, description, url }` |
+|  POST   | `/users/`             | create user            | `{ username, password }`           |
 |  GET    | `/users/:id`          | read user              |                                    |
-|  PUT    | `/users/:id`          | update user            | `{ username, password, image, description, url }` |
+|  PUT    | `/users/:id`          | update user            | `{ username, password, image, bio, url }` |
 |  DELETE | `/users/:id`          | delete user            |                                    |
-|  GET    | `/users/heavies` | read heavies      |                                    |
-|  GET    | `/users/:id/coupons` | read coupons          |                                    |
+|  GET    | `/users/heavies`      | read heavies           |                                    |
+|  PATCH  | `/users/:id/coupons`  | add coupon to user     | `{ offer: { _id, partner, image, description, cost } }`           |
+|  GET    | `/users/find?coupon=:couponid`  | get user who has coupon     |                      |
+|  PATCH  | `/users/:id/coupons/:couponid`  | redeem user's coupon        |                      |
 
-### Event endpoints
-    
-| Method  | Path                  | Description            | Body                               |
-| :----:  | ----------------      | ----------------       | ------------------------------     |
-|  GET    | `/events`             | list of events         |                                    |
-|  POST   | `/events`             | create event           | `{ facebook_id, name, cover, description, start_time, end_time, place }` |
-|  GET    | `/events/:id`         | read event             |                                    |
-|  PUT    | `/events/:id`         | update event           | `{ facebook_id, name, cover, description, start_time, end_time, place }` |
-|  PATCH  | `/events/:id/vote`    | upvote /downvote event | `{ vote }`                         |
-|  DELETE | `/events/:id`         | delete event           |                                    |
-    
 ### Offers endpoints
 
 | Method  | Path                  | Description            | Body                               |
 | :----:  | ----------------      | ----------------       | ------------------------------     |
 |  GET    | `/offers`             | list of offers         |                                    |
 |  GET    | `/offers/:id`         | read offer             |                                    |
+
+### Event endpoints
+
+| Method  | Path                  | Description            | Body                               |
+| :----:  | ----------------      | ----------------       | ------------------------------     |
+|  POST   | `/events`             | create event           | `{ url }`                          |
+|  GET    | `/events`             | list of events         |                                    |
+|  GET    | `/events/:id`         | read event             |                                    |
+|  PUT    | `/events/:id`         | update event           | `{ event: { data: { name, cover: { source }, start_time, end_time, description, ticket_uri, place: { name: place, location: { street, city, country: 'Spain', latitude, longitude } } }` |
+|  DELETE | `/events/:id`         | delete event           |                                    |
+|  GET    | `/events/search?query=:query` | search events  |                                    |
+
+### Vote endpoints
+
+| Method  | Path                  | Description            | Body                               |
+| :----:  | ----------------      | ----------------       | ------------------------------     |
+|  POST   | `/votes/`             | create vote on event from user | ` { eventId, direction } ` |
+|  GET    | `/votes`        		  | read votes by user on events   |                            |
+|  PUT    | `/votes/:id`          | change vote by user on event   | ` { eventId, direction } ` |
+|  DELETE | `/votes/:id?eventid=:eventid&direction=:direction` | delete vote  |                 |
 
 ## Models
 

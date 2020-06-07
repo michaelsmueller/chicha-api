@@ -2,7 +2,7 @@ const express = require('express');
 const Event = require('../models/Event');
 const User = require('../models/User');
 const { ObjectID } = require('mongodb');
-const { checkEventNameNotEmpty, checkEventURLNotEmpty } = require('../middlewares');
+const { checkCanUserUpdateEvent, checkEventNameNotEmpty, checkEventURLNotEmpty } = require('../middlewares');
 const { getEventData, getEventId } = require('../helpers/fb');
 const { awardUser } = require('../helpers/awardPoints');
 
@@ -44,9 +44,10 @@ router.get('/:id', async (req, res, next) => {
 	}
 });
 
-router.put('/:id', checkEventNameNotEmpty, async (req, res, next) => {
+router.put('/:id', checkCanUserUpdateEvent, checkEventNameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
 	const { data } = res.locals;
+	console.log('put update event');
 	try {
 		await Event.findByIdAndUpdate(id, data);
 		return res.status(200).json({ code: 'event-updated', event: data });

@@ -2,7 +2,7 @@ const express = require('express');
 const Event = require('../models/Event');
 const User = require('../models/User');
 const { ObjectID } = require('mongodb');
-const { checkCanUserUpdateEvent, checkEventNameNotEmpty, checkEventURLNotEmpty } = require('../middlewares');
+const { checkUserCanDeleteEvent, checkUserCanUpdateEvent, checkEventNameNotEmpty, checkEventURLNotEmpty } = require('../middlewares');
 const { getEventData, getEventId } = require('../helpers/fb');
 const { awardUser } = require('../helpers/awardPoints');
 
@@ -44,7 +44,7 @@ router.get('/:id', async (req, res, next) => {
 	}
 });
 
-router.put('/:id', checkCanUserUpdateEvent, checkEventNameNotEmpty, async (req, res, next) => {
+router.put('/:id', checkUserCanUpdateEvent, checkEventNameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
 	const { data } = res.locals;
 	console.log('put update event');
@@ -76,7 +76,7 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 	}
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', checkUserCanDeleteEvent, async (req, res, next) => {
 	const { id } = req.params;
 	const { currentUser: { _id: userId } } = req.session;
 	try {

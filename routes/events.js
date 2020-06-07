@@ -47,7 +47,6 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id', checkUserCanUpdateEvent, checkEventNameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
 	const { data } = res.locals;
-	console.log('put update event');
 	try {
 		await Event.findByIdAndUpdate(id, data);
 		return res.status(200).json({ code: 'event-updated', event: data });

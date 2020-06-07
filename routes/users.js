@@ -55,7 +55,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.put('/:id', checkUsernameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
-	const { user, user: { password } } = req.session;
+	const { user, user: { password } } = res.locals;
 	if (password) user.hashed_password = encrypt.hashPassword(password);
 	try {
 		await User.findByIdAndUpdate(id, user);

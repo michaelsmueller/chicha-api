@@ -14,7 +14,6 @@ router.post('/', checkUsernameAndPasswordNotEmpty, async (req, res, next) => {
 		const hashed_password = encrypt.hashPassword(password);
 		const newUser = await User.create({ username, hashed_password });
 		req.session.currentUser = newUser;
-		res.locals.currentUser = req.session.currentUser;
 		return res.status(201).json(newUser);
 	} catch (error) {
 		next(error);
@@ -56,7 +55,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.put('/:id', checkUsernameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
-	const { user, user: { password } } = res.locals;
+	const { user, user: { password } } = req.session;
 	if (password) user.hashed_password = encrypt.hashPassword(password);
 	try {
 		await User.findByIdAndUpdate(id, user);

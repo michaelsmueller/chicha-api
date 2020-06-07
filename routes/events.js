@@ -9,8 +9,6 @@ const { awardUser } = require('../helpers/awardPoints');
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-	console.log('GET /events, res.locals', res.locals);
-	console.log('GET /events, req.session', req.session);
 	try {
 		const events = await Event
 			.find({ 'data.start_time': { $gte: new Date() }})
@@ -58,7 +56,7 @@ router.put('/:id', checkEventNameNotEmpty, async (req, res, next) => {
 });
 
 router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
-	const { currentUser, currentUser: { _id: userId }  } = res.locals;
+	const { currentUser, currentUser: { _id: userId }  } = req.session;
 	const { url } = res.locals.event;
 	try {
 		const eventId = getEventId(url).toString();
@@ -79,7 +77,7 @@ router.post('/', checkEventURLNotEmpty, async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
 	const { id } = req.params;
-	const { currentUser: { _id: userId } } = res.locals;
+	const { currentUser: { _id: userId } } = req.session;
 	try {
 		await Event.findByIdAndDelete(id);
 		await User.findByIdAndUpdate(userId, { $inc: { points: -10, balance: -10 } });

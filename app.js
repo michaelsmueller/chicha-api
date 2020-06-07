@@ -36,19 +36,6 @@ app.use(
 	cors({
 		credentials: true,
 		origin: [process.env.FRONTEND_DOMAIN],
-		// allowedHeaders: [
-		// 	'Accept',
-		// 	'Accept-Encoding',
-		// 	'Accept-Language',
-		// 	'Cookie',
-		// 	'Connection',
-		// 	'Host',
-		// 	'If-None-Match',
-		// 	'Origin',
-		// 	'Referer',
-		// 	'User-Agent',
-		// 	'X-Requested-With'
-		// ]
 	})
 );
 app.use(logger('dev'));
@@ -60,24 +47,15 @@ app.use(
 	session({
 		store: new MongoStore({
 			mongooseConnection: mongoose.connection,
-			ttl: 24 * 60 * 60, // 1 day
+			ttl: 24 * 60 * 60,
 		}),
 		secret: process.env.SECRET_SESSION,
 		resave: true,
 		saveUninitialized: true,
 		name: process.env.COOKIE_NAME,
-		cookie: { maxAge: 24 * 60 * 60 * 1000 },
+		cookie: { maxAge: 24 * 60 * 60 * 30 },
 	})
 );
-
-app.use((req, res, next) => {
-  if (req.session.currentUser) {
-		res.locals.currentUser = req.session.currentUser;
-		console.log('app middleware, req.session', req.session);
-		console.log('app middleware, res.locals', res.locals);
-  }
-  next();
-});
 
 app.use('/', authRouter);
 app.use('/users', userRouter);

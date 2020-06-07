@@ -2,7 +2,7 @@ const express = require('express');
 const User = require('../models/User');
 const encrypt = require('../helpers/encrypt');
 const { ObjectID } = require('mongodb');
-const { checkCanUserUpdateUser, checkUsernameNotEmpty, checkUsernameAndPasswordNotEmpty } = require('../middlewares');
+const { checkUserModifyingSelf, checkUsernameNotEmpty, checkUsernameAndPasswordNotEmpty } = require('../middlewares');
 
 const router = express.Router();
 
@@ -53,7 +53,7 @@ router.get('/:id', async (req, res, next) => {
 	}
 });
 
-router.put('/:id', checkCanUserUpdateUser, checkUsernameNotEmpty, async (req, res, next) => {
+router.put('/:id', checkUserModifyingSelf, checkUsernameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
 	const { user, user: { password } } = res.locals;
 	if (password) user.hashed_password = encrypt.hashPassword(password);
@@ -65,7 +65,7 @@ router.put('/:id', checkCanUserUpdateUser, checkUsernameNotEmpty, async (req, re
 	}
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', checkUserModifyingSelf, async (req, res, next) => {
 	const { id } = req.params;
 	try {
 		await User.findByIdAndDelete(id);
@@ -88,7 +88,7 @@ router.patch('/:id/coupons/:couponid', async (req, res, next) => {
 	}
 });
 
-router.patch('/:id/coupons', async (req, res, next) => {
+router.patch('/:id/coupons', checkUserModifyingSelf, async (req, res, next) => {
 	const { id } = req.params;
 	const offer = req.body;
 	try {

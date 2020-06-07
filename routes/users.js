@@ -2,7 +2,7 @@ const express = require('express');
 const User = require('../models/User');
 const encrypt = require('../helpers/encrypt');
 const { ObjectID } = require('mongodb');
-const { checkUsernameNotEmpty, checkUsernameAndPasswordNotEmpty } = require('../middlewares');
+const { checkCanUserUpdateUser, checkUsernameNotEmpty, checkUsernameAndPasswordNotEmpty } = require('../middlewares');
 
 const router = express.Router();
 
@@ -53,7 +53,7 @@ router.get('/:id', async (req, res, next) => {
 	}
 });
 
-router.put('/:id', checkUsernameNotEmpty, async (req, res, next) => {
+router.put('/:id', checkCanUserUpdateUser, checkUsernameNotEmpty, async (req, res, next) => {
 	const { id } = req.params;
 	const { user, user: { password } } = res.locals;
 	if (password) user.hashed_password = encrypt.hashPassword(password);

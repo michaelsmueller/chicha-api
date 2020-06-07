@@ -4,9 +4,16 @@ const checkIfLoggedIn = (req, res, next) => {
 };
 
 const checkCanUserUpdateEvent = (req, res, next) => {
-	const { currentUser, currentUser: { _id: userId }  } = req.session;
+	const { currentUser: { _id: userId }  } = req.session;
 	const { creator } = req.body;
 	if (userId === creator) next();
+	else res.status(401).json({ code: 'unauthorized' });
+};
+
+const checkCanUserUpdateUser = (req, res, next) => {
+	const { currentUser: { _id: userId }  } = req.session;
+	const { id } = req.params;
+	if (userId === id) next();
 	else res.status(401).json({ code: 'unauthorized' });
 };
 
@@ -46,6 +53,7 @@ const checkUsernameAndPasswordNotEmpty = (req, res, next) => {
 module.exports = {
 	checkIfLoggedIn,
 	checkCanUserUpdateEvent,
+	checkCanUserUpdateUser,
 	checkEventNameNotEmpty,
 	checkEventURLNotEmpty,
 	checkUsernameNotEmpty,

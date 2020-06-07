@@ -36,7 +36,19 @@ app.use(
 	cors({
 		credentials: true,
 		origin: [process.env.FRONTEND_DOMAIN],
-		// allowedHeaders: [ 'Accept', 'Accept-Encoding', 'Accept-Language', 'Cookie', 'Connection', 'Host', 'If-None-Match', 'Origin', 'Referer', 'User-Agent', 'X-Requested-With' ]
+		// allowedHeaders: [
+		// 	'Accept',
+		// 	'Accept-Encoding',
+		// 	'Accept-Language',
+		// 	'Cookie',
+		// 	'Connection',
+		// 	'Host',
+		// 	'If-None-Match',
+		// 	'Origin',
+		// 	'Referer',
+		// 	'User-Agent',
+		// 	'X-Requested-With'
+		// ]
 	})
 );
 app.use(logger('dev'));
@@ -54,9 +66,7 @@ app.use(
 		resave: true,
 		saveUninitialized: true,
 		name: process.env.COOKIE_NAME,
-		cookie: {
-			maxAge: 24 * 60 * 60 * 1000,
-		},
+		cookie: { maxAge: 24 * 60 * 60 * 1000 },
 	})
 );
 

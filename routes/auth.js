@@ -5,7 +5,7 @@ const encrypt = require('../helpers/encrypt');
 
 const router = express.Router();
 
-router.get('/whoami', (req, res, next) => {
+router.get('/whoami', (req, res,) => {
 	if (req.session.currentUser) {
 		res.status(200).json(req.session.currentUser);
 		res.locals.currentUser = req.session.currentUser;

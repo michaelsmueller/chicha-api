@@ -1,29 +1,13 @@
 const checkIfLoggedIn = (req, res, next) => {
-	if (req.session.currentUser) {
-		next();
-	} else {
-		res.status(401).json({ code: 'unauthorized' });
-	}
+	if (req.session.currentUser) next();
+	else res.status(401).json({ code: 'unauthorized' });
 };
 
-const checkUsernameNotEmpty = (req, res, next) => {
-	const { username } = req.body;
-	if (username !== '') {
-		res.locals.user = req.body;
-		next();
-	} else {
-		res.status(422).json({ code: 'validation' });
-	}
-};
-
-const checkUsernameAndPasswordNotEmpty = (req, res, next) => {
-	const { username, password } = req.body;
-	if (username !== '' && password !== '') {
-		res.locals.auth = req.body;
-		next();
-	} else {
-		res.status(422).json({ code: 'validation' });
-	}
+const checkCanUserUpdateEvent = (req, res, next) => {
+	const { currentUser, currentUser: { _id: userId }  } = req.session;
+	const { creator } = req.body;
+	if (userId === creator) next();
+	else res.status(401).json({ code: 'unauthorized' });
 };
 
 const checkEventNameNotEmpty = (req, res, next) => {
@@ -31,9 +15,7 @@ const checkEventNameNotEmpty = (req, res, next) => {
 	if (name !== '') {
 		res.locals.data = req.body;
 		next();
-	} else {
-		res.status(422).json({ code: 'validation' });
-	}
+	} else res.status(422).json({ code: 'validation' });
 };
 
 const checkEventURLNotEmpty = (req, res, next) => {
@@ -41,13 +23,29 @@ const checkEventURLNotEmpty = (req, res, next) => {
 	if (url !== '') {
 		res.locals.event = req.body;
 		next();
-	} else {
-		res.status(422).json({ code: 'validation' });
-	}
+	} else res.status(422).json({ code: 'validation' });
 };
+
+const checkUsernameNotEmpty = (req, res, next) => {
+	const { username } = req.body;
+	if (username !== '') {
+		res.locals.user = req.body;
+		next();
+	} else res.status(422).json({ code: 'validation' });
+};
+
+const checkUsernameAndPasswordNotEmpty = (req, res, next) => {
+	const { username, password } = req.body;
+	if (username !== '' && password !== '') {
+		res.locals.auth = req.body;
+		next();
+	} else res.status(422).json({ code: 'validation' });
+};
+
 
 module.exports = {
 	checkIfLoggedIn,
+	checkCanUserUpdateEvent,
 	checkEventNameNotEmpty,
 	checkEventURLNotEmpty,
 	checkUsernameNotEmpty,

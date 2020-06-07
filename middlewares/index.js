@@ -1,9 +1,23 @@
+const Event = require('../models/Event');
+
 const checkIfLoggedIn = (req, res, next) => {
 	if (req.session.currentUser) next();
 	else res.status(401).json({ code: 'unauthorized' });
 };
 
-const checkCanUserUpdateEvent = (req, res, next) => {
+const checkUserCanDeleteEvent = async (req, res, next) => {
+	const { currentUser: { _id: userId }  } = req.session;
+	const { id: eventId } = req.params;
+	try {
+		const { creator } = await Event.findOne({ _id: eventId }, { creator: 1, _id: 0 });
+		if (userId === creator.toString()) next();
+		else res.status(401).json({ code: 'unauthorized' });
+	} catch (error) {
+		next(error);
+	}
+};
+
+const checkUserCanUpdateEvent = (req, res, next) => {
 	const { currentUser: { _id: userId }  } = req.session;
 	const { creator } = req.body;
 	if (userId === creator) next();
@@ -52,7 +66,8 @@ const checkUsernameAndPasswordNotEmpty = (req, res, next) => {
 
 module.exports = {
 	checkIfLoggedIn,
-	checkCanUserUpdateEvent,
+	checkUserCanDeleteEvent,
+	checkUserCanUpdateEvent,
 	checkUserModifyingSelf,
 	checkEventNameNotEmpty,
 	checkEventURLNotEmpty,

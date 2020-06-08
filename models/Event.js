@@ -9,7 +9,7 @@ const eventSchema = new Schema(
 		data: {
 			id: { type: String },
 			name: { type: String, required: true },
-			cover: { source: { type: String } },
+			cover: { source: { type: String, default: 'https://www.cowgirlcontractcleaning.com/wp-content/uploads/sites/360/2018/05/placeholder-img-3.jpg' } },
 			attending_count: { type: Number },
 			interested_count: { type: Number },
 			start_time: { type: Date },

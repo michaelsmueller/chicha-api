@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../models/User');
+const Offer = require('../models/Offer');
 const encrypt = require('../helpers/encrypt');
 const { ObjectID } = require('mongodb');
 const { checkUserModifyingSelf, checkUsernameNotEmpty, checkUsernameAndPasswordNotEmpty } = require('../middlewares');
@@ -38,6 +39,24 @@ router.get('/find', async (req, res, next) => {
 		const { _id: userId } = user;
 		const coupon = user.coupons.find((coupon) => coupon._id.toString() === couponId);
 		return res.json({ code: 'user-found', userId, coupon });
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.get('/coupons/find', async (req, res, next) => {
+	const { partner: partnerId } = req.query;
+	try {
+		const partnerOffers = await Offer.find({ creator: partnerId });
+		const partnerOfferIds = partnerOffers.map((offer) => ObjectID(offer._id));
+		const redeemedCoupons = await User.aggregate([
+			{ $unwind: { path: '$coupons' } },
+			{ $match: { 'coupons.status': 'redeemed', 'coupons.offer': { $in: partnerOfferIds } } },
+			{ $lookup: { from: 'offers', localField: 'coupons.offer', foreignField: '_id', as: 'coupons.offer' } },
+			{ $unwind: { path: '$coupons.offer' } },
+			{ $sort: { 'coupons.redeemedOn': -1 } },
+		]);
+		return res.json({ code: 'coupons-found', redeemedCoupons });
 	} catch (error) {
 		next(error);
 	}

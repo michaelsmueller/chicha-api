@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 
 const offerSchema = new Schema(
 	{
+		creator: { type: Schema.Types.ObjectId, ref: 'User' },
 		partner: { type: String },
 		image: { type: String },
 		description: { type: String },

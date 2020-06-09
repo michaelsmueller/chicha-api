@@ -47,6 +47,7 @@ Check the GitHub frontend repository (see link below) for more info on how the w
 |  PATCH  | `/users/:id/coupons`  | add coupon to user     | `{ offer: { _id, partner, image, description, cost } }`           |
 |  GET    | `/users/find?coupon=:couponid`  | get user who has coupon     |                      |
 |  PATCH  | `/users/:id/coupons/:couponid`  | redeem user's coupon        |                      |
+|  GET    | `/users/coupons/find?partner:partnerid`  | get coupons redeemed by partner        |                      |
 
 ### Offers endpoints
 
@@ -109,7 +110,7 @@ Check the GitHub frontend repository (see link below) for more info on how the w
 	data: {
 		id: { type: String },
 		name: { type: String, required: true },
-		cover: { source: { type: String } },
+		cover: { source: { type: String, default: placeholder.jpg } },
 		attending_count: { type: Number },
 		interested_count: { type: Number },
 		start_time: { type: Date },
@@ -154,6 +155,7 @@ Check the GitHub frontend repository (see link below) for more info on how the w
 
 ```javascript
 {
+	creator: { type: Schema.Types.ObjectId, ref: 'User' },
 	partner: { type: String },
 	image: { type: String },
 	description: { type: String },

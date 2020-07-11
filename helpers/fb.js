@@ -48,7 +48,7 @@ const likeEvent = async (url) => {
     '--disable-dev-shm-usage',
     '--single-process',
   ];
-  const options = { args, headless: false };
+  const options = { args, headless: true };
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
   await page.setViewport({ width: 800, height: 600 })

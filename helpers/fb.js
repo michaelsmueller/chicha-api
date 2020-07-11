@@ -42,30 +42,21 @@ const getEventId = (url) => {
 const likeEvent = async (url) => {
   const eventId = getEventId(url);
   const mobileUrl = `https://m.facebook.com/events/${eventId}`;
-
   const args = [
     '--no-sandbox',
     '--disable-setuid-sandbox',
     '--disable-dev-shm-usage',
     '--single-process',
   ];
-
-  const options = {
-    args,
-    headless: true,
-  };
-
+  const options = { args, headless: true };
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
   await page.setViewport({ width: 800, height: 600 })
-
   if (Object.keys(cookies).length) {
     console.log('setting cookies', cookies);
     await page.setCookie(...cookies);
-  } else {
-    await loginToFacebook(page);
-  }
-
+  } 
+  await loginToFacebook(page);
   await goToEventAndClickInterested(mobileUrl, page);
   await page.waitFor(2000);
   browser.close();
@@ -77,6 +68,11 @@ const goToEventAndClickInterested = async (mobileUrl, page) => {
   await links[0].click();
 };
 
+const checkIfLoggedIn = async (page) => {
+  if (page.$('#pass')) return false;
+  else return true;
+};
+
 const loginToFacebook = async (page) => {
   try {
     await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle0' });
@@ -84,11 +80,14 @@ const loginToFacebook = async (page) => {
     console.log('error navigating to Facebook login');
   }
   console.log('logging in to Facebook with user', FB_USERNAME);
-  await page.type('#email', FB_USERNAME, { delay: 1 });
-  await page.type('#pass', FB_PASSWORD, { delay: 1 });
-  await page.click('#loginbutton');
-  await page.waitFor(5000);
-  await writeCookies(page);
+  const isLoggedIn = await checkIfLoggedIn(page);
+  if (!isLoggedIn) {
+    await page.type('#email', FB_USERNAME, { delay: 1 });
+    await page.type('#pass', FB_PASSWORD, { delay: 1 });
+    await page.click('#loginbutton');
+    await page.waitFor(5000);
+    await writeCookies(page);
+  }
 }
 
 const writeCookies = async (page) => {

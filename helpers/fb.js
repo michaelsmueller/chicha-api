@@ -48,7 +48,7 @@ const likeEvent = async (url) => {
     '--disable-dev-shm-usage',
     '--single-process',
   ];
-  const options = { args, headless: true };
+  const options = { args, headless: false };
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
   await page.setViewport({ width: 800, height: 600 })
@@ -69,7 +69,7 @@ const goToEventAndClickInterested = async (mobileUrl, page) => {
 };
 
 const checkIfLoggedIn = async (page) => {
-  if (page.$('#pass')) return false;
+  if (await page.$('#pass')) return false;
   else return true;
 };
 
@@ -81,6 +81,7 @@ const loginToFacebook = async (page) => {
   }
   console.log('logging in to Facebook with user', FB_USERNAME);
   const isLoggedIn = await checkIfLoggedIn(page);
+  console.log('isLoggedIn', isLoggedIn);
   if (!isLoggedIn) {
     await page.type('#email', FB_USERNAME, { delay: 1 });
     await page.type('#pass', FB_PASSWORD, { delay: 1 });

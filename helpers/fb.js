@@ -12,13 +12,13 @@ const { FB_USERNAME, FB_PASSWORD, FB_TOKEN } = process.env;
 
 const getEventData = async (url) => {
 	try {
-		const { data } = await getEvent(url);
+    const { data } = await getEvent(url);
 		return data;
 	} catch (error) {
 		try {
 			await likeEvent(url);
 			const { data } = await getEvent(url);
-			return data;
+      return data;
 		} catch (error) {
 			return error;
 		}
@@ -29,6 +29,7 @@ const getEvent = (url) => {
   const eventId = getEventId(url);
   const FIELDS = [ 'name', 'cover', 'attending_count', 'interested_count', 'description', 'start_time', 'end_time', 'place', 'ticket_uri' ];
   const requestUrl = `https://graph.facebook.com/${eventId}?fields=${FIELDS}&access_token=${FB_TOKEN}`;
+  console.log('requestUrl', requestUrl);
   return axios.get(requestUrl);
 };
 
@@ -51,14 +52,14 @@ const likeEvent = async (url) => {
   const options = { args, headless: true };
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
-  await page.setViewport({ width: 800, height: 600 })
+  // await page.setViewport({ width: 800, height: 600 })
   if (Object.keys(cookies).length) {
     console.log('setting cookies', cookies);
     await page.setCookie(...cookies);
   } 
   await loginToFacebook(page);
   await goToEventAndClickInterested(mobileUrl, page);
-  await page.waitFor(2000);
+  await page.waitFor(1500);
   browser.close();
 };
 
@@ -75,18 +76,19 @@ const checkIfLoggedIn = async (page) => {
 
 const loginToFacebook = async (page) => {
   try {
-    await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle0' });
+    await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle2' });
   } catch (error) {
     console.log('error navigating to Facebook login');
   }
   console.log('logging in to Facebook with user', FB_USERNAME);
-  const isLoggedIn = await checkIfLoggedIn(page);
-  console.log('isLoggedIn', isLoggedIn);
+  // const isLoggedIn = await checkIfLoggedIn(page);
+  // console.log('isLoggedIn', isLoggedIn);
+  const isLoggedIn = true;
   if (!isLoggedIn) {
     await page.type('#email', FB_USERNAME, { delay: 1 });
     await page.type('#pass', FB_PASSWORD, { delay: 1 });
     await page.click('#loginbutton');
-    await page.waitFor(5000);
+    await page.waitFor(2000);
     await writeCookies(page);
   }
 }
